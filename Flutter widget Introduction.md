@@ -14,9 +14,11 @@ child分为2种，flexible、固定尺寸的
 
 - ###### 高度
 
-  1、如果设置了mainAxisSize: MainAxisSize.max，主轴上尽可能大，高度取parent widget允许的最大高度
+  1、如果child 全是flexible 则为parent maxHeight
 
-  2、否则：MainAxisSize.min，主轴上尽可能小，高度能包裹住所有child即可。（必须满足parent的高度约束，否则溢出）
+  2、如果设置了mainAxisSize: MainAxisSize.max，主轴上尽可能大，高度取parent widget允许的最大高度
+  
+  3、否则：MainAxisSize.min，主轴上尽可能小，高度能包裹住所有child即可。（必须满足parent的高度约束，否则溢出）
 
 ###### 布局步骤：
 
@@ -127,4 +129,27 @@ Note：Widget在同一层级位置变化时，使用LocalKey即可让Flutter找�
   1、widget移动到不同层级时保存状态
 
   2、类似getElementById,可直接找到该Widget进行操作 【不推荐】
+  
+  
 
+### ConstrainedBox给child增加额外的约束
+
+比较简单，在满足parent constrain的基础上，增加额外的约束，并传递给child，将自身size设置为child的size
+
+```dart
+void performLayout() {
+    final BoxConstraints constraints = this.constraints;
+    if (child != null) {
+      child!.layout(_additionalConstraints.enforce(constraints), parentUsesSize: true);
+      size = child!.size;
+    } else {
+      size = _additionalConstraints.enforce(constraints).constrain(Size.zero);
+    }
+  }
+```
+
+###### 自身size:
+
+1、有child，跟child一样大小
+
+2、否则取parent允许的最小宽高
