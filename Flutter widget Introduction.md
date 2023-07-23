@@ -1,0 +1,130 @@
+# Flutter widget Introduction
+
+
+
+### Column widget 如何布局child？自己宽高如何确定？
+
+child分为2种，flexible、固定尺寸的
+
+- ###### 宽度
+
+  1、如果设置了 crossAxisAlignment: CrossAxisAlignment.stretch，宽度为parent widget允许的最大宽度
+
+  2、否则为宽度最大的child的宽度（当然必须满足parent的宽度约束）
+
+- ###### 高度
+
+  1、如果设置了mainAxisSize: MainAxisSize.max，主轴上尽可能大，高度取parent widget允许的最大高度
+
+  2、否则：MainAxisSize.min，主轴上尽可能小，高度能包裹住所有child即可。（必须满足parent的高度约束，否则溢出）
+
+###### 布局步骤：
+
+1、将约束传递给固定尺寸的 child widget，child必须返回其size给Row（高度unconstrained，宽度是放松后parent的约束）
+2、剩下的总空间已经确定，根据所有Flex子组件的弹性系数分配剩余空间（高宽已经确定，紧约束，宽度是放松后parent的约束）
+
+
+
+### LimitedBox 作用
+
+1. Parent widget 如果传递的是无边界，则使用limitedbox 指定的值
+
+2. 否则limitedbox 无效
+
+   
+
+### Align、Center如何布局？其自身大小如何确定？
+
+```dart
+ void performLayout() {
+    final BoxConstraints constraints = this.constraints;
+    final bool shrinkWrapWidth = _widthFactor != null || constraints.maxWidth == double.infinity;
+    final bool shrinkWrapHeight = _heightFactor != null || constraints.maxHeight == double.infinity;
+
+    if (child != null) {
+      child!.layout(constraints.loosen(), parentUsesSize: true);
+      size = constraints.constrain(Size(
+        shrinkWrapWidth ? child!.size.width * (_widthFactor ?? 1.0) : double.infinity,
+        shrinkWrapHeight ? child!.size.height * (_heightFactor ?? 1.0) : double.infinity,
+      ));
+      alignChild();
+    } else {
+      size = constraints.constrain(Size(
+        shrinkWrapWidth ? 0.0 : double.infinity,
+        shrinkWrapHeight ? 0.0 : double.infinity,
+      ));
+    }
+
+  }
+```
+
+[widthFactor] and [heightFactor]，代表Align or Center是其child的倍数
+
+###### 布局步骤：
+
+1、判断是否需要收缩（即尽可能包裹child）【设置factor 或者 parent约束为无界】
+
+2、对parent传递过来的constrain进行loose后传递给其child
+
+3、有孩子的情况下，需要收缩则尽可能包裹child，否则为parent最大值
+
+4、无孩子，需要收缩则取parent最小值，否则为parent最大值
+
+###### 两种alignment
+
+1、Alignment(0, 0) 以中心点为坐标系原点，范围【-1，1】
+
+2、FractionalOffset(0.2, 0.6)，以左上角为坐标系原点，范围【0，1】
+
+
+
+### FractionalSizeBox设置比例widthFactor，将parent的最大宽高乘以Factor，紧约束，传递给其child
+
+
+
+### CustomeMutulChildLayout 自定义布局
+
+###### 优点：
+
+可传递给child任意约束，需要通过layoutId 组件包裹
+
+###### 自身size；
+
+可以通过重写getSize 方法返回给其Parent（默认返回parent.biggest），无法根据child变化
+
+###### 缺陷：
+
+1、本身大小无法随child 而变化
+2、child不能无中生有，必须从外面传递过来，用LayoutId 包裹
+
+​	
+
+### Stack 如何布局child？自身的尺寸如何确定？
+
+child widget 分为两种：有位置的（被Align、Position包裹的）、无位置的
+
+###### 自身尺寸：
+
+​	1、如果child widget 全是无位置的，则自身size为child widget最大的那个
+​	2、否则取parent widget 允许的的最大尺寸
+
+### Key 分为GLobal Key、 LocalKey
+
+QA：为什么需要Key？Widget 发生变化时（位置移动、层级移动、增加、删除），会根据class & key二者去匹配原始的Element（含state信息），没有key可能会匹配错误，或者丢失，为了使得能重新匹配到原始的State信息，需要Key。
+
+Note：Widget在同一层级位置变化时，使用LocalKey即可让Flutter找回她的状态，如果是移动到不同层级时，只能使用GlobalKey
+
+- Local Key（只判断同一层级）
+
+  1、ValueKey 判断两个对象是否相等
+
+  2、ObjectKey 判断是否同一个对象
+
+  3、UniqueKey 唯一值
+
+- GLobal Key
+
+  1、widget移动到不同层级时保存状态
+
+  2、类似getElementById,可直接找到该Widget进行操作 【不推荐】
+
