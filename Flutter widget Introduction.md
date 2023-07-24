@@ -74,7 +74,7 @@
 
 
 
-### Column widget 如何布局child？自己宽高如何确定？
+### Column widget 如何布局child？自己宽高如何确定？【Row基本上一样】
 
 child分为2种，flexible、固定尺寸的
 
@@ -112,7 +112,10 @@ child分为2种，flexible、固定尺寸的
 这两个控件想让child对齐，理论上自身size当然越大越好（海阔凭鱼跃，取parent允许的最大值），如此才能有足够的空间给child摆布！，除非
 
 - parrent的最大值是无穷大，那就没办法了，因为size必须有确定的值，又不能取parent的最小值（太小就无法摆下child），所以只能往child的大小上收缩（尽可能包裹住child），
+
 - 强制指出了factor字段，告诉我不能太大，最大只能是child的factor倍
+
+  从代码角度看，的确如此：
 
 ```dart
  void performLayout() {
