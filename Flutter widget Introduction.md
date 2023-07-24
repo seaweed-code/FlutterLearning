@@ -200,7 +200,7 @@ child widget 分为两种：有位置的（被Align、Position包裹的）、无
 
 ###### Stack.fit属性：
 
-1、expand 将parent的constraint进行expend后传给child（size={maxWidth，maxHeight}）
+1、expand 将parent的constraint进行expend后传给child（size={maxWidth，maxHeight}）紧约束
 
 2、passthrough 将parent的constraint 透传给child
 
