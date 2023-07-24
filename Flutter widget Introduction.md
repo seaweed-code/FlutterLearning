@@ -68,13 +68,13 @@
       current = Transform(transform: transform!, alignment: transformAlignment, child: current);
     }
 
-    return current!;
+    return current!; 
   }
 ```
 
 
 
-### Column widget 如何布局child？自己宽高如何确定？【Row基本上一样】
+### Column widget 如何布局child？自己宽高如何确定？【Row同理】
 
 child分为2种，flexible、固定尺寸的
 
@@ -195,8 +195,20 @@ child widget 分为两种：有位置的（被Align、Position包裹的）、无
 
 ###### 自身尺寸：
 
-​	1、如果child widget 全是无位置的，则自身size为child widget最大的那个
-​	2、否则取parent widget 允许的的最大尺寸
+1、如果child widget 全是无位置的，则自身size为child widget最大的那个
+​2、否则取parent widget 允许的的最大尺寸
+
+###### Stack.fit属性：
+
+1、expand 将parent的constraint进行expend后传给child（size={maxWidth，maxHeight}）
+
+2、passthrough 将parent的constraint 透传给child
+
+3、loose 将parent的constraint进行loosen后传给child（minWidth=0、minHeight=0）
+
+
+
+
 
 ### Key 分为GLobal Key、 LocalKey
 
