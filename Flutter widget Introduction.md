@@ -2,6 +2,78 @@
 
 
 
+### Container是什么？自己宽高如何确定呢？
+
+内部其实就是做了一层层包装，你给Container设置的每个属性，都会裹上一层widget，以免出现“金字塔”形代码，可读性差。
+
+**QA：**其自身size如何确定呢？
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    Widget? current = child;
+
+    if (child == null && (constraints == null || !constraints!.isTight)) {
+      current = LimitedBox(
+        maxWidth: 0.0,
+        maxHeight: 0.0,
+        child: ConstrainedBox(constraints: const BoxConstraints.expand()),
+      );
+    } else if (alignment != null) {
+      current = Align(alignment: alignment!, child: current);
+    }
+
+    final EdgeInsetsGeometry? effectivePadding = _paddingIncludingDecoration;
+    if (effectivePadding != null) {
+      current = Padding(padding: effectivePadding, child: current);
+    }
+
+    if (color != null) {
+      current = ColoredBox(color: color!, child: current);
+    }
+
+    if (clipBehavior != Clip.none) {
+      assert(decoration != null);
+      current = ClipPath(
+        clipper: _DecorationClipper(
+          textDirection: Directionality.maybeOf(context),
+          decoration: decoration!,
+        ),
+        clipBehavior: clipBehavior,
+        child: current,
+      );
+    }
+
+    if (decoration != null) {
+      current = DecoratedBox(decoration: decoration!, child: current);
+    }
+
+    if (foregroundDecoration != null) {
+      current = DecoratedBox(
+        decoration: foregroundDecoration!,
+        position: DecorationPosition.foreground,
+        child: current,
+      );
+    }
+
+    if (constraints != null) {
+      current = ConstrainedBox(constraints: constraints!, child: current);
+    }
+
+    if (margin != null) {
+      current = Padding(padding: margin!, child: current);
+    }
+
+    if (transform != null) {
+      current = Transform(transform: transform!, alignment: transformAlignment, child: current);
+    }
+
+    return current!;
+  }
+```
+
+
+
 ### Column widget 如何布局child？自己宽高如何确定？
 
 child分为2种，flexible、固定尺寸的
@@ -36,6 +108,11 @@ child分为2种，flexible、固定尺寸的
    
 
 ### Align、Center如何布局？其自身大小如何确定？
+
+这两个控件想让child对齐，理论上自身size当然越大越好（海阔凭鱼跃，取parent允许的最大值），如此才能有足够的空间给child摆布！，除非
+
+- parrent的最大值是无穷大，那就没办法了，因为size必须有确定的值，又不能取parent的最小值（太小就无法摆下child），所以只能往child的大小上收缩（尽可能包裹住child），
+- 强制指出了factor字段，告诉我不能太大，最大只能是child的factor倍
 
 ```dart
  void performLayout() {
@@ -112,7 +189,7 @@ child widget 分为两种：有位置的（被Align、Position包裹的）、无
 
 ### Key 分为GLobal Key、 LocalKey
 
-QA：为什么需要Key？Widget 发生变化时（位置移动、层级移动、增加、删除），会根据class & key二者去匹配原始的Element（含state信息），没有key可能会匹配错误，或者丢失，为了使得能重新匹配到原始的State信息，需要Key。
+**QA：**为什么需要Key？Widget 发生变化时（位置移动、层级移动、增加、删除），会根据class & key二者去匹配原始的Element（含state信息），没有key可能会匹配错误，或者丢失，为了使得能重新匹配到原始的State信息，需要Key。
 
 Note：Widget在同一层级位置变化时，使用LocalKey即可让Flutter找回她的状态，如果是移动到不同层级时，只能使用GlobalKey
 
