@@ -82,15 +82,17 @@ child分为2种，flexible、固定尺寸的
 
   1、如果设置了 crossAxisAlignment: CrossAxisAlignment.stretch，宽度为parent widget允许的最大宽度
 
-  2、否则为宽度最大的child的宽度（当然必须满足parent的宽度约束）
+  2、否则宽度能包裹住所有child即可（最大的child的宽度，当然必须满足parent的宽度约束）
 
 - ###### 高度
 
-  1、如果child 全是flexible 则为parent maxHeight
+  1、如果child 全是flexible 则为parent maxHeight，然后各个child再按比例分割
 
   2、如果设置了mainAxisSize: MainAxisSize.max，主轴上尽可能大，高度取parent widget允许的最大高度
   
   3、否则：MainAxisSize.min，主轴上尽可能小，高度能包裹住所有child即可。（必须满足parent的高度约束，否则溢出）
+
+**QA：**如果child全是flexible、且设置了MainAxisSize.min，高度怎么办？
 
 ###### 布局步骤：
 
@@ -184,6 +186,12 @@ child分为2种，flexible、固定尺寸的
 ### Stack 如何布局child？自身的尺寸如何确定？
 
 child widget 分为两种：有位置的（被Align、Position包裹的）、无位置的
+
+###### 布局步骤：
+
+1、先布局无位置的child，其中最大的size作为自身size
+
+2、自身size确定后，才能确定剩下的有位置posioned的组件
 
 ###### 自身尺寸：
 
