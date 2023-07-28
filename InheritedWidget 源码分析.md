@@ -40,6 +40,7 @@ abstract class Element extends DiagnosticableTree implements BuildContext {
   PersistentHashMap<Type, InheritedElement>? _inheritedElements;
   
   ///自己监听的parent InheritedElement对象（调用了dependOnInheritedWidgetOfExactType就会自动注册）
+  ///没有核心用途，主要用于调试信息
   Set<InheritedElement>? _dependencies;
   
   ///从自己的祖辈widget传承来的_inheritedElements 快速找到离自己最近的InheritedWidget
