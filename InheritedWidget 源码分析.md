@@ -41,6 +41,25 @@ abstract class Element extends DiagnosticableTree implements BuildContext {
   
   ///自己监听的parent InheritedElement对象（调用了dependOnInheritedWidgetOfExactType就会自动注册）
   Set<InheritedElement>? _dependencies;
+  
+  ///从自己的祖辈widget传承来的_inheritedElements 快速找到离自己最近的InheritedWidget
+   @override
+  T? dependOnInheritedWidgetOfExactType<T extends InheritedWidget>({Object? aspect}) {
+    final InheritedElement? ancestor = _inheritedElements == null ? null : _inheritedElements![T];
+    if (ancestor != null) {///找到了，就把自己注册一下，下次就能收到parent 的通知didChangeDependencies
+      return dependOnInheritedElement(ancestor, aspect: aspect) as T;
+    }
+    return null;
+  }
+  
+  ///把自己监听的parent，单独保存起来，
+   @override
+  InheritedWidget dependOnInheritedElement(InheritedElement ancestor, { Object? aspect }) {
+    _dependencies ??= HashSet<InheritedElement>();
+    _dependencies!.add(ancestor);//保存起来
+    ancestor.updateDependencies(this, aspect);///让parent把我也保存起来，这样它就能很方便的通知我
+    return ancestor.widget as InheritedWidget;
+  }
 }
 ```
 
@@ -74,22 +93,15 @@ abstract class ProxyElement extends ComponentElement {
     rebuild(force: true);
   }
 
-  /// Called during build when the [widget] has changed.
-  ///
-  /// By default, calls [notifyClients]. Subclasses may override this method to
-  /// avoid calling [notifyClients] unnecessarily (e.g. if the old and new
-  /// widgets are equivalent).
+  ///当自己被重新创建时，会被调用
+  ///默认情况，我们去调用所有监听自己的child的didChangeDependencies方法，
+  ///子类可重写此方法，避免不必要的通知（比如新的、老的widget完全一样的情况）
   @protected
   void updated(covariant ProxyWidget oldWidget) {
     notifyClients(oldWidget);///每次更新的时候自动通知所有监听者的didChangeDependencies
   }
  
-  1、需要子类InheritedElement去实现，对于InheritedElement来说调用监听者的didChangeDependencies方法
-  /// Notify other objects that the widget associated with this element has
-  /// changed.
-  ///
-  /// Called during [update] (via [updated]) after changing the widget
-  /// associated with this element but before rebuilding this element.
+  ///需要子类InheritedElement去实现，对于InheritedElement来说调用监听者的didChangeDependencies方法
   @protected
   void notifyClients(covariant ProxyWidget oldWidget);
 }
@@ -99,7 +111,9 @@ abstract class ProxyElement extends ComponentElement {
 
 ```dart
 class InheritedElement extends ProxyElement {
-  ///保存所有监听自己变化的child，什么时候保存的呢？什么时候去通知呢？
+  ///1、保存所有监听自己变化的child，什么时候保存的呢？什么时候去通知呢？
+  ///2、通过分析知道，当需要监听自己的child调用dependOnInheritedElement时，会把它自己传递过来让我保存
+  ///3、当前wiget被重新创建，调用update方法后，会遍历下面的监听者通知所有的child，我的信息已经改变
   final Map<Element, Object?> _dependents = HashMap<Element, Object?>();
 
   ///从上到下，将树上的所有InheritedElement，保存到字典里，一代代传递下去，如果自己也是InheritedElement，则把自己也加进去，所以每个widget都保存了自己祖祖辈辈积累的所有InheritedElement对象，好处就是用的时候可以快速查询，不用再从下往上再去找
@@ -122,6 +136,18 @@ class InheritedElement extends ProxyElement {
       ///3、逐个调用每个监听者的didChangeDependencies 方法
       notifyDependent(oldWidget, dependent);
     }
+  }
+  
+  ///监听我的child（也就是dependent）会通知我，让我把它保存起来，
+  ///这样下次我一变化就可以快速通知它们
+   @protected
+  void updateDependencies(Element dependent, Object? aspect) {
+    setDependencies(dependent, null);///后面的参数暂未使用，所以目前传null
+  }
+  
+  ///把监听自己的child，通通保存到map中，value目前都是null,保留使用
+   void setDependencies(Element dependent, Object? value) {
+    _dependents[dependent] = value;
   }
 }
 ```
