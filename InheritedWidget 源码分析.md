@@ -2,8 +2,9 @@
 
 #### 1、InheritedWidget虚基类
 
-- 可以继承此类，增加一些自定义信息，以共享给所有的child。所有的InheritedWidget都会在Element Tree上被代代相传，传给他们的child。每个child widget都持有一个Map<Type,InheritedElement>保存了从自己往上的祖祖辈辈的InheritedWidget对象，所以才能快速通过ClassType找到往上最近的InheritedWidget对象，取到共享的数据
-- InheritedWidget被重新创建的时候，依赖它的所有child都会收到didChangeDependencies调用
+- 每个widget都各自持有一个PersistentHashMap<Type,InheritedElement> 对象，保存了从widget Tree中遗传下来的所有InheritedWidget对象，且代代相传。
+- 可以继承此类，增加一些自定义信息，以共享给自己的child widget。由于所有的InheritedWidget都会自动传给他们的child widget。所以每个widget都能快速从Map中找到最近的InheritedWidget对象，并取到共享的数据
+- 当InheritedWidget被重新创建的时候，依赖它的所有child都会收到didChangeDependencies调用通知
 
 ```dart
 abstract class InheritedWidget extends ProxyWidget {
