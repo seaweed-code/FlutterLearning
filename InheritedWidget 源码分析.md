@@ -36,7 +36,8 @@ abstract class ProxyWidget extends Widget {
 ///1、所以可以看出BuildContext本质就是该widget对应的Element对象
 abstract class Element extends DiagnosticableTree implements BuildContext {
 
-  ///祖祖辈辈传下来的所有的InheritedElement对象，Key是继承InheritedWidget的子类runtimeType，value就是该InheritedElement对象
+///祖祖辈辈传下来的所有的InheritedElement对象，Key是继承InheritedWidget的子类runtimeType，value就是该InheritedElement对象
+///任何context（也就是Element）都可以在Element tree从当前节点往上找InheritedElement，有了这个祖传宝贝，我们可以更快速找到
   PersistentHashMap<Type, InheritedElement>? _inheritedElements;
   
   ///自己监听的parent InheritedElement对象（调用了dependOnInheritedWidgetOfExactType就会自动注册）
