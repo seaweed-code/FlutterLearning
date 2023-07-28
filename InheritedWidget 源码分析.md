@@ -4,7 +4,7 @@
 
 - 每个widget都各自持有一个PersistentHashMap<Type,InheritedElement> 对象，保存了从widget Tree中遗传下来的所有InheritedWidget对象，且代代相传。
 - 可以继承此类，增加一些自定义信息，以共享给自己的child widget。由于所有的InheritedWidget都会自动传给他们的child widget。所以每个widget都能快速从Map中找到最近的InheritedWidget对象，并取到共享的数据
-- 当InheritedWidget被重新创建的时候，依赖它的所有child都会收到didChangeDependencies调用通知
+- 当InheritedWidget被重新创建的时候，依赖它的所有child都会收到didChangeDependencies通知，然后被rebuild
 
 ```dart
 abstract class InheritedWidget extends ProxyWidget {
@@ -92,7 +92,7 @@ abstract class ProxyElement extends ComponentElement {
     assert(widget != newWidget);
     super.update(newWidget);
     assert(widget == newWidget);
-    updated(oldWidget);
+    updated(oldWidget);///参数其实并没有被使用，通知所有监听者
     rebuild(force: true);
   }
 
