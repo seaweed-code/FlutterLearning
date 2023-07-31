@@ -141,6 +141,12 @@ class InheritedElement extends ProxyElement {
     }
   }
   
+  ///通知依赖自己的child，调用它的didChangeDependencies方法
+  @protected
+  void notifyDependent(covariant InheritedWidget oldWidget, Element dependent) {
+    dependent.didChangeDependencies();
+  }
+  
   ///监听我的child（也就是dependent）会通知我，让我把它保存起来，
   ///这样下次我一变化就可以快速通知它们
    @protected
