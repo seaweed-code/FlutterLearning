@@ -162,7 +162,46 @@ child分为2种，flexible、固定尺寸的
 
 
 
-### FractionalSizeBox设置比例widthFactor，将parent的最大宽高乘以Factor，紧约束，传递给其child
+### FractionalSizeBox 设置child的宽高比例
+
+可以设置child的宽是parent宽的 widthFactor 倍（即将parent的最大宽高乘以Factor），得到**紧约束**，传递给其child，如果factor>1 那么child就比自身大，但是自己的size 必须满足parent的约束。
+
+```dart
+///若某个维度设置了factor，则取其最大值的factor倍并为紧约束向下传递，否则维持parent约束不变
+BoxConstraints _getInnerConstraints(BoxConstraints constraints) {
+    double minWidth = constraints.minWidth;
+    double maxWidth = constraints.maxWidth;
+    if (_widthFactor != null) {///有则取最大值的_widthFactor 倍，
+      final double width = maxWidth * _widthFactor!;///可能超过parent的宽度
+      minWidth = width;///minWidth == maxWidth为紧约束
+      maxWidth = width;
+    }
+    double minHeight = constraints.minHeight;
+    double maxHeight = constraints.maxHeight;
+    if (_heightFactor != null) {///_heightFactor 倍，
+      final double height = maxHeight * _heightFactor!;///可能超过parent的高度
+      minHeight = height;///minHeight == maxHeight为紧约束
+      maxHeight = height;
+    }
+    return BoxConstraints(
+      minWidth: minWidth,
+      maxWidth: maxWidth,
+      minHeight: minHeight,
+      maxHeight: maxHeight,
+    );
+}
+
+@override
+void performLayout() {
+    if (child != null) {
+      child!.layout(_getInnerConstraints(constraints), parentUsesSize: true);//得到紧约束，可能比自己大
+      size = constraints.constrain(child!.size);///但是自己的size必须遵守parent的约束，不能比parent大
+      alignChild();
+    } else {
+      size = constraints.constrain(_getInnerConstraints(constraints).constrain(Size.zero));
+    } 
+}
+```
 
 
 
