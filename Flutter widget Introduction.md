@@ -224,7 +224,7 @@ void performLayout() {
 
 ### Stack 如何布局child？自身的尺寸如何确定？
 
-child widget 分为两种：有位置的（被Align、Position包裹的）、无位置的
+child widget 分为两种：有位置的（被Position包裹的）、无位置的（没有被Position包裹的）
 
 ###### 布局步骤：
 
@@ -244,6 +244,12 @@ child widget 分为两种：有位置的（被Align、Position包裹的）、无
 2、passthrough 将parent的constraint 透传给child
 
 3、loose 将parent的constraint进行loosen后传给child（minWidth=0、minHeight=0）
+
+###### 特点：
+
+1、允许child widget之间叠加在一起
+
+2、默认所有的child都按照alignment属性进行排练，如果child之间有对其、间距等布局要求，可以配合其他widget实现
 
 
 
