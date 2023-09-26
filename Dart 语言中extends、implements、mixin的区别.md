@@ -139,6 +139,8 @@ mixin M1 on A, B {
   }
 }
 
+///继承关系：A <- B <- M1 <- T 
+//所以，每次找方法时，都会从继承链的最底端T，往上找
 class T with A, B, M1 {
   @override
   void test33() {
@@ -155,10 +157,10 @@ class T with A, B, M1 {
 
 void main() {
   final aaa = T();
-  aaa.test();
-  aaa.test33();
-  aaa.testAA();
-  aaa.testBB();
+  aaa.test();  ///调用顺序T::test -> M1::test不存在 -> B::test -> A::test
+  aaa.test33();///调用顺序T::test33 ->M1::test33 ->调用aaa.test，按上一步走
+  aaa.testAA();///调用顺序T::testAA不存在 -> M1::testAA不存在 -> B::testAA不存在 -> A::testAA
+  aaa.testBB();///调用顺序T::testBB不存在 -> M1::testBB -> B::testBB
 }
 
 最后输出如下：
