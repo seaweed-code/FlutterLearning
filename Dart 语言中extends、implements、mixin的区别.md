@@ -52,6 +52,8 @@ class C extends B implements A{///OK，B已经实现了A
 
 #### 3、mixin 混入
 
+在不继承该类的情况下，混入该类使得自己可以拥有该类的所有方法。其本质是：虽然代码中没有显示继承该类，但是编译器会将该类插入到当前类的继承链中，使得自己可以使用mixin类的方法。因而mixin类中的方法如果调用了super，会按照最后生成的继承链往上调用。
+
 ```dart
 abstract class A {
   void test();
