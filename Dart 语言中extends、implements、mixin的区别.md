@@ -52,8 +52,6 @@ class C extends B implements A{///OK，B已经实现了A
 
 #### 3、mixin 混入
 
-
-
 ```dart
 abstract class A {
   void test();
@@ -95,10 +93,10 @@ class TT extends T with M1 {}///OK，因为on M1的条件已经被父类T满足
 
 ///允许重复with相同的类，类层次结构会多加一层
 ///类层次结构相当于：从上往下，父类->子类
-///					T 
-///				  M1
-///         M1
-///        TTT
+///					T     :grandparent
+///				  M1    :parent
+///         M1    :son
+///        TTT    :grandson
 class TTT extends T with M1,M1 {}///OK
 ```
 
