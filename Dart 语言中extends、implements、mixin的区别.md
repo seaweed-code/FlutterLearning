@@ -141,7 +141,7 @@ mixin M1 on A, B {
 
 ///继承关系：A <- B <- M1 <- T 
 //所以，每次找方法时，都会从继承链的最底端T，往上找
-class T with A, B, M1 {
+class T with A, B, M1 {///with后面的顺序至关重要，关系到继承关系的顺序
   @override
   void test33() {
     print("test33 T");
