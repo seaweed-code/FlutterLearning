@@ -126,7 +126,7 @@ mixin B on A {
   }
 }
 
-mixin M1 on A, B {
+mixin M1 on A, B {///on后面的顺序不重要
   void test33() {
     print("test33==M1");
     test();
