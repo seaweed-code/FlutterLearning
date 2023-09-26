@@ -102,3 +102,76 @@ class TT extends T with M1 {}///OK，因为on M1的条件已经被父类T满足
 class TTT extends T with M1,M1 {}///OK
 ```
 
+又参考如下代码：
+
+```dart
+mixin A {
+  void test() {
+    print("test===A");
+  }
+
+  void testAA() {
+    print("testAA===A");
+  }
+}
+
+mixin B on A {
+  void test() {
+    super.test();
+    print("test===B");
+  }
+
+  void testBB() {
+    print("testBB===B");
+  }
+}
+
+mixin M1 on A, B {
+  void test33() {
+    print("test33==M1");
+    test();
+  }
+
+  @override
+  void testBB() {
+    print("testBB M1");
+    super.testBB();
+  }
+}
+
+class T with A, B, M1 {
+  @override
+  void test33() {
+    print("test33 T");
+    super.test33();
+  }
+
+  @override
+  void test() {
+    print("test T");
+    super.test();
+  }
+}
+
+void main() {
+  final aaa = T();
+  aaa.test();
+  aaa.test33();
+  aaa.testAA();
+  aaa.testBB();
+}
+
+最后输出如下：
+flutter: test T
+flutter: test===A
+flutter: test===B
+flutter: test33 T
+flutter: test33==M1
+flutter: test T
+flutter: test===A
+flutter: test===B
+flutter: testAA===A
+flutter: testBB M1
+flutter: testBB===B
+```
+
