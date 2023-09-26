@@ -22,7 +22,9 @@ class B extends A {
 
 #### 2、implements 接口实现
 
-与继承不同，非父子关系，无法调用或者重写覆盖父类方法
+1、与继承不同，非父子关系，无法调用或者重写覆盖父类方法
+
+2、必须实现接口中的所有方法（哪怕接口中已经有默认实现）
 
 ```dart
 abstract class A {
@@ -49,6 +51,8 @@ class C extends B implements A{///OK，B已经实现了A
 ```
 
 #### 3、mixin 混入
+
+
 
 ```dart
 abstract class A {
@@ -87,7 +91,7 @@ class T extends B implements A {///此处A、B的顺序调换，T的子类依然
   void testAA() {}
 }
 
-class TT extends T with M1 {}
+class TT extends T with M1 {}///OK，因为on M1的条件已经被父类T满足 
 
 ///允许重复with相同的类，类层次结构会多加一层
 ///类层次结构相当于：从上往下，父类->子类
