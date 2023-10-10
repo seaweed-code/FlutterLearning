@@ -73,13 +73,33 @@
   - 非空变量，必须在使用之前赋值
 
     ```dart
-    int lineCount; //不一定在声明变量时初始化，只需在第一次用到这个变量前初始化即可
-    if (weLikeToCount) {
-      lineCount = countLines();
-    } else {
-      lineCount = 0;
+    void fun(bool isEmpty) {
+        int lineCount;//不一定在声明变量时初始化，只需在第一次用到这个变量前初始化即可
+      
+        ///下面的if/else两个分支，必须都对lineCount进行初始化，否则编译器会提示错误
+        if (isEmpty) {
+          lineCount = 0;
+        } else {
+          lineCount = 0;
+        }
+        print(lineCount);
     }
-    print(lineCount);
+    ```
+
+  - late 申明的变量，必须为非空变量。可延时初始化，第一次读之前还未初始化则运行奔溃
+
+    ```dart
+    void fun(bool isEmpty) {
+        late int lineCount;///late类型变量，必须是非空，
+      
+       ///下面的if/else两个分支，有一个对lineCount进行初始化即可。都不初始化则编译器会报错
+        if (isEmpty) {///如果运行时，执行到这则奔溃，因为lineCount没有初始化
+          // lineCount = 0;///OK，
+        } else {
+          lineCount = 0;
+        }
+        print(lineCount);
+    }
     ```
 
   - 可空类型变量，如果没有初始化，默认值为null
