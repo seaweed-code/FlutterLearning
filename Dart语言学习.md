@@ -34,6 +34,32 @@
 
   
 
+- ### 工厂构造方法—factory
+
+  ```dart
+  class A {
+    A();
+    factory A.name() {///本质就是类方法，与普通类方法不同的是，强制了返回值必须是A类型
+      return A();
+    }
+  
+    static A name1() {///普通类方法，返回值可以随意
+      return A();
+    }
+  }
+  ```
+
+  与Objective-C中的类构造方法类似
+
+  ```objective-c
+  interface A : NSObject
+  + (instancetype)name; ///类方法，必须返回A类型对象
+  + (id)MethodB;///普通类方法，返回任意对象都可以
+  @end
+  ```
+
+  
+
 - ### 强类型
 
   - 强类型，变量被定义后，其类型完全确定，后面无法将其他类型值赋值给该变量。对C、C++而言，除非两个类型可以隐式或显示类型转换，否则无法编译。
