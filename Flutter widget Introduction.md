@@ -2,7 +2,8 @@
 
 
 
-### Container是什么？自己宽高如何确定呢？
+- ### Container是什么？自己宽高如何确定呢？
+
 
 内部其实就是做了一层层包装，你给Container设置的每个属性，内部自动帮你裹上一层widget，避免出现“金字塔”形代码，可读性差。
 
@@ -74,7 +75,8 @@
 
 
 
-### Column widget 如何布局child？自己宽高如何确定？【Row同理】
+- ### Column widget 如何布局child？自己宽高如何确定？【Row同理】
+
 
 child分为2种，flexible、固定尺寸的
 
@@ -99,9 +101,20 @@ child分为2种，flexible、固定尺寸的
 1、将约束传递给固定尺寸的 child widget，child必须返回其size给Row（高度unconstrained，宽度是放松后parent的约束）
 2、剩下的总空间已经确定，根据所有Flex子组件的弹性系数分配剩余空间（高宽已经确定，紧约束，宽度是放松后parent的约束）
 
+- ### OverflowBox允许child超出parent给的约束
 
+- ### SizedOverflowBox
 
-### LimitedBox 作用
+- ### FitedBox
+
+- ### Offstage隐藏与显示
+
+- ### Card
+
+- ### Wrap
+
+- ### LimitedBox 作用
+
 
 1. Parent widget 如果传递的是无边界，则使用limitedbox 指定的值
 
@@ -109,7 +122,8 @@ child分为2种，flexible、固定尺寸的
 
    
 
-### Align、Center如何布局？其自身大小如何确定？
+- ### Align、Center如何布局？其自身大小如何确定？
+
 
 这两个控件想让child对齐，理论上自身size当然越大越好（海阔凭鱼跃，取parent允许的最大值），如此才能有足够的空间给child摆布！，除非
 
@@ -162,7 +176,8 @@ child分为2种，flexible、固定尺寸的
 
 
 
-### FractionalSizeBox 设置child的宽高比例
+- ### FractionalSizeBox 设置child的宽高比例
+
 
 可以设置child的宽是parent宽的 widthFactor 倍（即将parent的最大宽高乘以Factor），得到**紧约束**，传递给其child，如果factor>1 那么child就比自身大，但是自己的size 必须满足parent的约束。
 
@@ -205,7 +220,8 @@ void performLayout() {
 
 
 
-### CustomeMutulChildLayout 自定义布局
+- ### CustomeMutulChildLayout 自定义布局
+
 
 ###### 优点：
 
@@ -222,7 +238,8 @@ void performLayout() {
 
 ​	
 
-### Stack 如何布局child？自身的尺寸如何确定？
+- ### Stack 如何布局child？自身的尺寸如何确定？
+
 
 child widget 分为两种：有位置的（被Position包裹的）、无位置的（没有被Position包裹的）
 
@@ -255,7 +272,8 @@ child widget 分为两种：有位置的（被Position包裹的）、无位置�
 
 
 
-### Key 分为GLobal Key、 LocalKey
+- ### Key 分为GLobal Key、 LocalKey
+
 
 **QA：**为什么需要Key？Widget 发生变化时（位置移动、层级移动、增加、删除），会根据class & key二者去匹配原始的Element（含state信息），没有key可能会匹配错误，或者丢失，为了使得能重新匹配到原始的State信息，需要Key。
 
@@ -277,7 +295,8 @@ Note：Widget在同一层级位置变化时，使用LocalKey即可让Flutter找�
   
   
 
-### ConstrainedBox给child增加额外的约束
+- ### ConstrainedBox给child增加额外的约束
+
 
 比较简单，在满足parent constrain的基础上，增加额外的约束，并传递给child，将自身size设置为child的size
 
