@@ -105,7 +105,33 @@ child分为2种，flexible、固定尺寸的
 
 - ### UnconstrainedBox 允许child超出parent给的约束，DEBUG模式下超了会有警告
 
-- ### SizedOverflowBox
+- ### SizedOverflowBox 指定自己的size，且允许child溢出
+
+  1、允许child超过自己的size
+
+  2、child的尺寸必须满足原始约束（不是unconstraint）
+
+  3、自身的尺寸为指定的size（当然是在满足parent给的约束条件下）。
+
+  ```dart
+  const SizedOverflowBox({
+      super.key,
+      required this.size,///接收一个指定的size，尽可能当成自己的size
+      this.alignment = Alignment.center,///child对齐方式
+      super.child,
+    });
+  
+  @override
+    void performLayout() {
+      size = constraints.constrain(_requestedSize);///将自己的size设置为满足父约束的基础上尽可能靠近指定的size
+      if (child != null) {
+        child!.layout(constraints, parentUsesSize: true);///将原始约束直接传给child
+        alignChild();
+      }
+    }
+  ```
+
+  
 
 - ### FitedBox
 
