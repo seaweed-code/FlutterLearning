@@ -122,6 +122,10 @@ child分为2种，flexible、固定尺寸的
 
 - ### ConstraintsTransformBox 约束自定义转换—允许对parent传递过来的约束进行自定义转换后传给child
 
+  1、允许对parent传过来的约束进行自定义转换后，再传给child
+
+  2、自身的大小，在满足自身约束前提下，尽可能包裹child
+
   ```dart
   /// Creates a widget that uses a function to transform the constraints it
     /// passes to its child. If the child overflows the parent's constraints, a
@@ -152,7 +156,7 @@ child分为2种，flexible、固定尺寸的
         assert(childConstraints.isNormalized, '$childConstraints is not normalized');
         _childConstraints = childConstraints;
         child.layout(childConstraints, parentUsesSize: true);///child使用转换后的约束，并返回child的大小
-        size = constraints.constrain(child.size);
+        size = constraints.constrain(child.size);///自身的大小尽可能包裹child，当然必须满足自己约束
         alignChild();
         final BoxParentData childParentData = child.parentData! as BoxParentData;
         _overflowContainerRect = Offset.zero & size;
