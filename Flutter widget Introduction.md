@@ -103,6 +103,8 @@ child分为2种，flexible、固定尺寸的
 
 - ### OverflowBox允许child超出parent给的约束
 
+- ### UnconstrainedBox 允许child超出parent给的约束，DEBUG模式下超了会有警告
+
 - ### SizedOverflowBox
 
 - ### FitedBox
