@@ -101,7 +101,72 @@ child分为2种，flexible、固定尺寸的
 1、将约束传递给固定尺寸的 child widget，child必须返回其size给Row（高度unconstrained，宽度是放松后parent的约束）
 2、剩下的总空间已经确定，根据所有Flex子组件的弹性系数分配剩余空间（高宽已经确定，紧约束，宽度是放松后parent的约束）
 
-- ### UnconstrainedBox 允许child超出parent给的约束，DEBUG模式下超了会有警告
+- ### UnconstrainedBox 允许child无限大，DEBUG模式下超了会有警告，child太大会被裁剪
+
+  ```dart
+  /// Creates a widget that imposes no constraints on its child, allowing it to
+    /// render at its "natural" size. If the child overflows the parents
+    /// constraints, a warning will be given in debug mode.
+    const UnconstrainedBox({
+      super.key,
+      this.child,
+      this.textDirection,
+      this.alignment = Alignment.center,
+      this.constrainedAxis,
+      this.clipBehavior = Clip.none,
+    });
+  
+  ```
+
+  
+
+- ### ConstraintsTransformBox 约束自定义转换—允许对parent传递过来的约束进行自定义转换后传给child
+
+  ```dart
+  /// Creates a widget that uses a function to transform the constraints it
+    /// passes to its child. If the child overflows the parent's constraints, a
+    /// warning will be given in debug mode.
+    ///
+    /// The `debugTransformType` argument adds a debug label to this widget.
+    ///
+    /// The `alignment`, `clipBehavior` and `constraintsTransform` arguments must
+    /// not be null.
+  const ConstraintsTransformBox({
+      super.key,
+      super.child,
+      this.textDirection,
+      this.alignment = Alignment.center,
+    ///typedef BoxConstraintsTransform = BoxConstraints Function(BoxConstraints);
+      required this.constraintsTransform, ///约束转换方法，将parent给的约束进行自定义转换
+      this.clipBehavior = Clip.none,
+      String debugTransformType = '',
+    }) : _debugTransformLabel = debugTransformType;
+  
+  
+  @override
+    void performLayout() {
+      final BoxConstraints constraints = this.constraints;
+      final RenderBox? child = this.child;
+      if (child != null) {
+        final BoxConstraints childConstraints = constraintsTransform(constraints);///将parent约束进行自定义转换
+        assert(childConstraints.isNormalized, '$childConstraints is not normalized');
+        _childConstraints = childConstraints;
+        child.layout(childConstraints, parentUsesSize: true);///child使用转换后的约束，并返回child的大小
+        size = constraints.constrain(child.size);
+        alignChild();
+        final BoxParentData childParentData = child.parentData! as BoxParentData;
+        _overflowContainerRect = Offset.zero & size;
+        _overflowChildRect = childParentData.offset & child.size;
+      } else {
+        size = constraints.smallest;
+        _overflowContainerRect = Rect.zero;
+        _overflowChildRect = Rect.zero;
+      }
+      _isOverflowing = RelativeRect.fromRect(_overflowContainerRect, _overflowChildRect).hasInsets;
+    }
+  ```
+
+  
 
 - ### OverflowBox 允许child溢出
 
