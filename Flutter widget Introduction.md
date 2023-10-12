@@ -101,9 +101,57 @@ child分为2种，flexible、固定尺寸的
 1、将约束传递给固定尺寸的 child widget，child必须返回其size给Row（高度unconstrained，宽度是放松后parent的约束）
 2、剩下的总空间已经确定，根据所有Flex子组件的弹性系数分配剩余空间（高宽已经确定，紧约束，宽度是放松后parent的约束）
 
-- ### OverflowBox允许child超出parent给的约束
-
 - ### UnconstrainedBox 允许child超出parent给的约束，DEBUG模式下超了会有警告
+
+- ### OverflowBox 允许child溢出
+
+  1、自身尺寸取parent能允许的最大值
+
+  2、把参数中指定的约束直接传给child（忽略parent给的约束，字段为空则取parent的值），允许child溢出
+
+  ```dart
+  /// A widget that imposes different constraints on its child than it gets
+  /// from its parent, possibly allowing the child to overflow the parent.
+  class OverflowBox extends SingleChildRenderObjectWidget {
+    /// Creates a widget that lets its child overflow itself.
+    const OverflowBox({
+      super.key,
+      this.alignment = Alignment.center,
+      this.minWidth, ///有的话，约束不做任何处理直接传给child；如果是null，则使用parent的值，下同
+      this.maxWidth,
+      this.minHeight,
+      this.maxHeight,
+      super.child,
+    });
+    
+    ///核心布局代码：
+     BoxConstraints _getInnerConstraints(BoxConstraints constraints) {
+      return BoxConstraints(
+        minWidth: _minWidth ?? constraints.minWidth,///使用用户指定的约束值，为空则使用parent的值，下同
+        maxWidth: _maxWidth ?? constraints.maxWidth,
+        minHeight: _minHeight ?? constraints.minHeight,
+        maxHeight: _maxHeight ?? constraints.maxHeight,
+      );
+    }
+  
+    @override
+    bool get sizedByParent => true;
+  
+    @override
+    Size computeDryLayout(BoxConstraints constraints) {
+      return constraints.biggest;///使用parent给的约束最大值
+    }
+  
+    @override
+    void performLayout() {
+      if (child != null) {
+        child?.layout(_getInnerConstraints(constraints), parentUsesSize: true);
+        alignChild();
+      }
+    }
+  ```
+
+  
 
 - ### SizedOverflowBox 指定自己的size，且允许child溢出
 
