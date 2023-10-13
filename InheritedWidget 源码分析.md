@@ -37,8 +37,9 @@ abstract class ProxyWidget extends Widget {
 ///1、所以可以看出BuildContext本质就是该widget对应的Element对象
 abstract class Element extends DiagnosticableTree implements BuildContext {
 
-///祖祖辈辈传下来的所有的InheritedElement对象，Key是继承InheritedWidget的子类runtimeType，value就是该InheritedElement对象
+///祖辈传下的所有的InheritedElement对象，Key是继承InheritedWidget的子类runtimeType，value就是该InheritedElement对象
 ///任何context（也就是Element）都可以在Element tree从当前节点往上找InheritedElement，有了这个祖传宝贝，我们可以更快速找到
+///由于key是类的类型，如果同类型的InheritedWidget类在树上被使用多次，则往下传递的过程中下面的会覆盖上面的
   PersistentHashMap<Type, InheritedElement>? _inheritedElements;
   
   ///自己监听的parent InheritedElement对象（调用了dependOnInheritedWidgetOfExactType就会自动注册）
@@ -194,7 +195,7 @@ class InheritedModelElement<T> extends InheritedElement {
 ///每个dependent监听者都可能对不同的方面感兴趣，根据保存的一一对应关系，判断是否需要通知他们
   @override
   void notifyDependent(InheritedModel<T> oldWidget, Element dependent) {
-    final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;
+    final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;///dependent所关心的哪些aspect
     ///如上面所言，set为null表示，目前没有任何监听，所以不需要处理
     if (dependencies == null) {
       return;
