@@ -176,6 +176,8 @@ class InheritedModelElement<T> extends InheritedElement {
   ///3、set为nil表示目前还没有监听任何aspect
   @override
   void updateDependencies(Element dependent, Object? aspect) {
+    ///父类里是final Map<Element, Object?> _dependents 
+    //这里由于存在一对多，所以value用集合存储多个可能的aspect
     final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;
     ////目前已经监听了所有的，自然就不需要再保存了，参考上面的第二点
     if (dependencies != null && dependencies.isEmpty) {
