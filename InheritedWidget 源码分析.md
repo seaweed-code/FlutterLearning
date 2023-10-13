@@ -191,13 +191,17 @@ class InheritedModelElement<T> extends InheritedElement {
       setDependencies(dependent, (dependencies ?? HashSet<T>())..add(aspect as T));
     }
   }
-
+///每个dependent监听者都可能对不同的方面感兴趣，根据保存的一一对应关系，判断是否需要通知他们
   @override
   void notifyDependent(InheritedModel<T> oldWidget, Element dependent) {
     final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;
+    ///如上面所言，set为null表示，目前没有任何监听，所以不需要处理
     if (dependencies == null) {
       return;
     }
+    ///1、set不为nil，但是为空表示监听所有变化
+    ///2、继承InheritedModel的子类重写了updateShouldNotifyDependent方法中，指定是否需要通知
+    ///满足上面任何条件则通知监听者更新自己
     if (dependencies.isEmpty || (widget as InheritedModel<T>).updateShouldNotifyDependent(oldWidget, dependencies)) {
       dependent.didChangeDependencies();
     }
