@@ -236,31 +236,34 @@ abstract class InheritedModel<T> extends InheritedWidget {
   @protected
   bool isSupportedAspect(Object aspect) => true;
 
-  ///这里考虑了一种特色情况;同一个类型的InheritedModel可能在数上会多次出现
+  ///这里考虑了一种特殊情况;同一个类型的InheritedModel可能在数上会多次出现，所以这里用了递归一直往树上找
   ///这里会从当前节点context往上找出所有的T，直到遇到第一个isSupportedAspect返回true的为止。所以数组中最后一个元素是最顶上的Widget，而且是支持该aspect的，数组前面的T，都不支持该aspect，数组第一个元素是最接近context的（也就是最底部的）
   static void _findModels<T extends InheritedModel<Object>>(BuildContext context, Object aspect, List<InheritedElement> results) {
+    ///从当前节点祖上传下来的所有InheritedWidget中找T
     final InheritedElement? model = context.getElementForInheritedWidgetOfExactType<T>();
-    if (model == null) {
+    if (model == null) {///祖上没有传下来，意味着当前节点往上一个T都没有，不用费劲了
       return;
     }
 
+    ///找到一个T，不管它是否支持该aspect，先保存再说
     results.add(model);
-
-    assert(model.widget is T);
+    
     final T modelWidget = model.widget as T;
+    ///终于找到第一个支持该aspect的T，可以交差了，且当前是在数组中最后一个，千万注意，后面会考到
+    //再提醒一下，数组前面的虽然都是T，但是都不支持aspect
     if (modelWidget.isSupportedAspect(aspect)) {
       return;
     }
 
     Element? modelParent;
     model.visitAncestorElements((Element ancestor) {
-      modelParent = ancestor;
-      return false;
+      modelParent = ancestor;///找到parent
+      return false;///表示找到自己的直接上司parent即可，不用继续
     });
-    if (modelParent == null) {
+    if (modelParent == null) {///自己没有parent，说明自己已经是root了，不用继续了
       return;
     }
-
+   ///前面或许已经找到了T，因为它不支持aspect，所以递归往树上继续找，并依次保存到数组中
     _findModels<T>(modelParent!, aspect, results);
   }
 
@@ -280,23 +283,24 @@ abstract class InheritedModel<T> extends InheritedWidget {
   ///
   /// If no ancestor of type T exists, null is returned.
   static T? inheritFrom<T extends InheritedModel<Object>>(BuildContext context, { Object? aspect }) {
-    if (aspect == null) {
+    if (aspect == null) {///aspect为null,表示监听所有aspect，
       return context.dependOnInheritedWidgetOfExactType<T>();
     }
 
-    // Create a dependency on all of the type T ancestor models up until
-    // a model is found for which isSupportedAspect(aspect) is true.
+    ///从当前节点往树上找到所有类型上T的inheritedModel，直到遇到第一个支持该aspect的为止
+    ///由上面分析可知，数组最后一位才是支持该aspect的，前面的都不支持
     final List<InheritedElement> models = <InheritedElement>[];
     _findModels<T>(context, aspect, models);
-    if (models.isEmpty) {
+    if (models.isEmpty) {///树上一个都么有找到，那更不用说了
       return null;
     }
 
-    final InheritedElement lastModel = models.last;
+    final InheritedElement lastModel = models.last;///取最后一个，刚才强调了，现在知道为啥了吧
     for (final InheritedElement model in models) {
+      ///虽然数组中只有最后一位支持aspect,但是都通通注册监听
       final T value = context.dependOnInheritedElement(model, aspect: aspect) as T;
       if (model == lastModel) {
-        return value;
+        return value;///返回最顶部的InheritedModel
       }
     }
 
