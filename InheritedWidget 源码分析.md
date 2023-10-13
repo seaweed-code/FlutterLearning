@@ -114,7 +114,7 @@ abstract class ProxyElement extends ComponentElement {
 
 ```dart
 class InheritedElement extends ProxyElement {
-  ///1、保存所有监听自己变化的child，什么时候保存的呢？什么时候去通知呢？
+  ///1、保存所有监听自己变化的child和它关心哪些变化？，什么时候保存的呢？什么时候去通知呢？
   ///2、通过分析知道，当需要监听自己的child调用dependOnInheritedElement时，会把它自己传递过来让我保存
   ///3、当前wiget被重新创建，调用update方法后，会遍历下面的监听者通知所有的child，我的信息已经改变
   final Map<Element, Object?> _dependents = HashMap<Element, Object?>();
@@ -151,7 +151,8 @@ class InheritedElement extends ProxyElement {
   ///这样下次我一变化就可以快速通知它们
    @protected
   void updateDependencies(Element dependent, Object? aspect) {
-    setDependencies(dependent, null);///后面的参数暂未使用，所以目前传null
+    setDependencies(dependent, null);///后面的参数暂未使用，所以目前传null,
+    ///对于InheritedWidget来说，aspect都为null，表示关心所有变化，但是对于子类InheritedModel来说可不一样
   }
   
   ///把监听自己的child，通通保存到map中，value目前都是null,保留使用
@@ -159,5 +160,47 @@ class InheritedElement extends ProxyElement {
     _dependents[dependent] = value;
   }
 }
+```
+
+
+
+
+
+```dart
+class InheritedModelElement<T> extends InheritedElement {
+  /// Creates an element that uses the given widget as its configuration.
+  InheritedModelElement(InheritedModel<T> super.widget);
+
+  ///1、某个child widget，也就是这里的dependet参数可能关心我的多个aspect，所以需要用set来保存多个aspect
+  ///2、set不为nil，但是为空则表示所有aspect变化都需要通知
+  ///3、set为nil表示目前还没有监听任何aspect
+  @override
+  void updateDependencies(Element dependent, Object? aspect) {
+    final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;
+    ////目前已经监听了所有的，自然就不需要再保存了，参考上面的第二点
+    if (dependencies != null && dependencies.isEmpty) {
+      return;
+    }
+
+    if (aspect == null) {///传过来的aspect为null，表示所有aspect都要监听，变成上面的第2点，以后所有变化都会通知
+      setDependencies(dependent, HashSet<T>());
+    } else {///否则，把当前感兴趣的aspect保存
+      assert(aspect is T);
+      setDependencies(dependent, (dependencies ?? HashSet<T>())..add(aspect as T));
+    }
+  }
+
+  @override
+  void notifyDependent(InheritedModel<T> oldWidget, Element dependent) {
+    final Set<T>? dependencies = getDependencies(dependent) as Set<T>?;
+    if (dependencies == null) {
+      return;
+    }
+    if (dependencies.isEmpty || (widget as InheritedModel<T>).updateShouldNotifyDependent(oldWidget, dependencies)) {
+      dependent.didChangeDependencies();
+    }
+  }
+}
+
 ```
 
