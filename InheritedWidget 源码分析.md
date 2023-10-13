@@ -186,7 +186,7 @@ class InheritedModelElement<T> extends InheritedElement {
 
     if (aspect == null) {///传过来的aspect为null，表示所有aspect都要监听，变成上面的第2点，以后所有变化都会通知
       setDependencies(dependent, HashSet<T>());
-    } else {///否则，把当前感兴趣的aspect保存
+    } else {///否则，把当前感兴趣的aspect插入到集合中
       assert(aspect is T);
       setDependencies(dependent, (dependencies ?? HashSet<T>())..add(aspect as T));
     }
