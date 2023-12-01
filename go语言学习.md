@@ -172,7 +172,67 @@ a[i], a[j] = a[j], a[i]
   fmt.Println(a == d) ///编译错误， [2]int 和 [3]int 是不同的类型，无法比较
   ```
 
-- Slice定义
+- Slice切片
+
+  定义：定义方式和数组非常类似，区别就是不指定数组大小
+
+  ```go
+  ///其本质类似于下面的结构体，描述了一个完整数组的一小片区域（slice）
+  type IntSlice struct {
+      ptr      *int ///第一个元素的地址
+      len int   ///总共多少个有效的元素
+      cap int   ///总共多大的空间
+  }  
+  
+  array := [...]string{"a","b","c","d","e","f","g","h"} ///定义一个数组，总共8个元素
+             ///索引：   0   1   2   3   4   5    6  7
+  s1 := array[2:6]///定义slice   |-----------|
+  ////s1描述了array数组中2...<6的位置，也就是2、3、4、5,因此通过s1操作数组其实就是直接操作原数组
+  
+  ///定义一个slice，这会隐式地创建一个合适大小的数组，然后slice的指针指向底层的数组
+  s2 := []int{0, 1, 2, 3, 4, 5} ///slice和数组的字面值语法很类似，区别是没有指定大小
+  
+  ///切片操作 
+  ///array[:] 代表array[0:len(array)] 也就是整个数组
+  ///array[:i] 代表数组从 第一个 -> i-1
+  ///array[i:] 代表数组从 i -> 最后一个
+  ```
+
+  Slice之间不能用==直接做比较
+
+  ```go
+  var s []int    // len(s) == 0, s == nil
+  s = nil        // len(s) == 0, s == nil
+  s = []int(nil) // len(s) == 0, s == nil
+  s = []int{}    // len(s) == 0, s != nil
+  
+  ```
+
+  Slice的append操作,参考如下代码：
+
+  ```go
+  func appendInt(x []int, y int) []int {
+      var z []int
+      zlen := len(x) + 1
+      if zlen <= cap(x) {
+          // There is room to grow.  Extend the slice.
+          z = x[:zlen]
+      } else {
+          // There is insufficient space.  Allocate a new array.
+          // Grow by doubling, for amortized linear complexity.
+          zcap := zlen
+          if zcap < 2*len(x) {
+              zcap = 2 * len(x)
+          }
+          z = make([]int, zlen, zcap)
+          copy(z, x) // a built-in function; see text
+      }
+      z[len(x)] = y
+      return z
+  }
+  ```
+
+  
 
 #### 16、反射
 
