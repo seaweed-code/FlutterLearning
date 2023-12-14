@@ -164,8 +164,6 @@ x = <-ch // a receive expression in an assignment statement
   abort <- struct{}{} ///write to channel，waiting...
   ```
 
-  
-
 - 不触发堵塞
 
   ```go
@@ -177,8 +175,6 @@ x = <-ch // a receive expression in an assignment statement
       // do nothing
   }
   ```
-
-  
 
 - 同时监听多个channel
 
