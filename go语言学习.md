@@ -133,7 +133,19 @@ a[i], a[j] = a[j], a[i]
 
 #### 12、channel通道
 
+channel是goroutine之间通信的机制，可以简单理解成一个队列，各个gorotinue之间可以安全访问（读取、写入）。往已满的channel中写入，会触发堵塞，同理，从空的channel中读取值也会堵塞。
+
+```go
+ch := make(chan int) // ch has type 'chan int'
+
+ch <- x  // a send statement
+x = <-ch // a receive expression in an assignment statement
+<-ch     // a receive statement; result is discarded
+```
+
 #### 13、select多路复用
+
+问题：对于一个channel通道，对其进行读取、或者写入，可能导致当前goroutine堵塞等待，如果需要同时对多个channel进行操作就没办法了？因为程序会按照代码顺序，依次操作多个通道，一旦其中一个channel触发堵塞，后续channel都无法操作。
 
 #### 14、闭包对外部变量的捕获方式
 
