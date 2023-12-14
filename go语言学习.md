@@ -295,3 +295,17 @@ x = <-ch // a receive expression in an assignment statement
 #### 16、反射
 
 #### 17、锁
+
+- 互斥锁【sync.Mutex】
+
+  与iOS中的互斥锁大致一样，特点：
+
+  1、尝试对已经被其他goroutine锁住的锁进行加锁，会使当前goroutine进入休眠，直到锁被释放
+
+  2、任何goroutine尝试加锁多次会死锁，不像递归锁，go语言中没有提供递归锁
+
+- 读写锁【sync.RWMutex】
+
+  与iOS中的互斥锁大致一样，特点：
+
+  1、支持多读单写。读操作可以安全并发，如果有写操作则需要按照顺序进行
