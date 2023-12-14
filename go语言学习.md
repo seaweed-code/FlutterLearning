@@ -147,6 +147,54 @@ x = <-ch // a receive expression in an assignment statement
 
 问题：对于一个channel通道，对其进行读取、或者写入，可能导致当前goroutine堵塞等待，如果需要同时对多个channel进行操作就没办法了？因为程序会按照代码顺序，依次操作多个通道，一旦其中一个channel触发堵塞，后续channel都无法操作。
 
+- 普通channel使用时，触发堵塞
+
+  ```go
+  abort := make(chan struct{})
+  
+  abort <- struct{}{} ///write to channel，waiting...
+  ```
+
+  
+
+- 不触发堵塞
+
+  ```go
+  select {
+  case <-abort:
+      fmt.Printf("Launch aborted!\n")
+      return
+  default:///上面的都没有，则运行此次，不触发堵塞
+      // do nothing
+  }
+  ```
+
+  
+
+- 同时监听多个channel
+
+  ```go
+  func main() {
+      // ...create abort channel...
+  
+      fmt.Println("Commencing countdown.  Press return to abort.")
+      tick := time.Tick(1 * time.Second)
+      for countdown := 10; countdown > 0; countdown-- {
+          fmt.Println(countdown)
+          select {
+          case <-tick:
+              // Do nothing.
+          case <-abort:
+              fmt.Println("Launch aborted!")
+              return
+          }
+      }
+      launch()
+  }
+  ```
+
+  
+
 #### 14、闭包对外部变量的捕获方式
 
 #### 15、数组和Slice
