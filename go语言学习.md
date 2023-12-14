@@ -174,13 +174,15 @@ x = <-ch // a receive expression in an assignment statement
 - 同时监听多个channel
 
   ```go
-  
   select {
-    case <-tick:
-    // Do nothing.
-    case <-abort:
-    fmt.Println("Launch aborted!")
-    return  
+  case <-ch1:
+      // ...
+  case x := <-ch2:
+      // ...use x...
+  case ch3 <- y:
+      // ...
+  default:
+      // ...
   }
   ```
 
