@@ -143,6 +143,15 @@ x = <-ch // a receive expression in an assignment statement
 <-ch     // a receive statement; result is discarded
 ```
 
+| 通道Channel状态 | 发送                                         | 接收                                                 |
+| :-------------- | :------------------------------------------- | :--------------------------------------------------- |
+| 无缓存通道      | 堵塞直到被读取                               | 堵塞直到有人发送                                     |
+| 有缓存通道      | 缓存未满：不堵塞<br />缓存满：堵塞直到被读取 | 缓存不为空：不堵塞<br />缓存为空：堵塞直到有新的发送 |
+| 值为nil的通道   | 永远堵塞                                     | 永远堵塞                                             |
+| 已关闭的通道    | panic                                        | 返回对应零值                                         |
+
+
+
 #### 13、select多路复用
 
 问题：对于一个channel通道，对其进行读取、或者写入，可能导致当前goroutine堵塞等待，如果需要同时对多个channel进行操作就没办法了？因为程序会按照代码顺序，依次操作多个通道，一旦其中一个channel触发堵塞，后续channel都无法操作。
@@ -181,7 +190,7 @@ x = <-ch // a receive expression in an assignment statement
       // ...use x...
   case ch3 <- y:
       // ...
-  default:
+  default://有default时不会堵塞，没有则会堵塞
       // ...
   }
   ```
