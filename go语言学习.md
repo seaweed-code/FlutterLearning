@@ -302,9 +302,9 @@ x = <-ch // a receive expression in an assignment statement
 
 #### 17、锁
 
-- 互斥锁【chan通道】
+- 互斥锁【缓存为1的chan通道】
 
-  利用通道也可以当成锁使用
+  由于channel的特点，当该通道的缓存为1的时候，其行为就已经是一个互斥锁了。
 
 - 互斥锁【sync.Mutex】
 
