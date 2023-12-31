@@ -77,7 +77,7 @@ insert into SC values('07' , '03' , 98);
 
    ```mysql
    #条件语句中嵌套SQL子语句，使用Exist语句判断是否存在
-   SELECT * FROM SC T0 WHERE T0.CId = '01'  and EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='02')
+   SELECT * FROM SC T0 WHERE EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='01')  and EXISTS (SELECT * FROM SC T2 WHERE T2.SId=T0.SId and T2.CId='02')
    ```
 
    
