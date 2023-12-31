@@ -84,17 +84,12 @@ insert into SC values('07' , '03' , 98);
    
    #利用Case end增加2列分别表示该列是否是01，02，再利用group分组和聚合函数判断是否存在01、02
    SELECT T.SId FROM
-   (SELECT *, 
-    CASE CId 	
-       WHEN '01' THEN	1
-       ELSE		0
-    END Is01, 
+   (SELECT *, IF(CId='01',1,0) Is01, #使用IF语句
     CASE CId
    	  WHEN '02' THEN 1
    	  ELSE  0
    END Is02
     FROM SC) T GROUP BY T.SId HAVING MAX(T.Is01) = 1 and MAX(T.Is02) = 1
-    
     
    ```
 
