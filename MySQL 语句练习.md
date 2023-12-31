@@ -78,9 +78,25 @@ insert into SC values('07' , '03' , 98);
    ```mysql
    #条件语句中嵌套SQL子语句，使用Exist语句判断是否存在
    SELECT * FROM SC T0 WHERE EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='01')  and EXISTS (SELECT * FROM SC T2 WHERE T2.SId=T0.SId and T2.CId='02')
-   ```
-
    
+   #关联查询，在on中加入判断条件，和第一题中基本类似
+   SELECT * FROM SC T0 JOIN SC T1 on T0.SId = T1.SId and T0.CId='01' and T1.CId='02'
+   
+   #利用Case end增加2列分别表示该列是否是01，02，再利用group分组和聚合函数判断是否存在01、02
+   SELECT T.SId FROM
+   (SELECT *, 
+    CASE CId 	
+       WHEN '01' THEN	1
+       ELSE		0
+    END Is01, 
+    CASE CId
+   	  WHEN '02' THEN 1
+   	  ELSE  0
+   END Is02
+    FROM SC) T GROUP BY T.SId HAVING MAX(T.Is01) = 1 and MAX(T.Is02) = 1
+    
+    
+   ```
 
 3. 
 
