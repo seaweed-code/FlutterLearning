@@ -82,7 +82,7 @@ insert into SC values('07' , '03' , 98);
    #关联查询，在on中加入判断条件，和第一题中基本类似
    SELECT * FROM SC T0 JOIN SC T1 on T0.SId = T1.SId and T0.CId='01' and T1.CId='02'
    
-   #利用Case end增加2列分别表示该列是否是01，02，再利用group分组和聚合函数判断是否存在01、02
+   #利用Case end、IF增加2列分别表示该列是否是01，02，再利用group分组和聚合函数判断是否存在01、02
    SELECT T.SId FROM
    (SELECT *, IF(CId='01',1,0) Is01, #使用IF语句
     CASE CId
