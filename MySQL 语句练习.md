@@ -1,6 +1,6 @@
 ## MySQL 语句练习
 
-数据表：
+**数据表：**
 
 | 表   | 字段                         |
 | ---- | ---------------------------- |
@@ -9,7 +9,7 @@
 | 教师 | Teacher(TId,Tname)           |
 | 成绩 | SC(SId,CId,score)            |
 
- SQL语句
+ **SQL语句**
 
 ```sql
 create table Student(SId varchar(10),Sname varchar(10),Sage datetime,Ssex varchar(10));
@@ -99,15 +99,46 @@ insert into SC values('07' , '03' , 98);
    #在Where子语句中嵌套SQL语句
    SELECT * FROM SC T0 WHERE EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='01') and NOT EXISTS (SELECT * FROM SC T2 WHERE T2.SId=T0.SId and T2.CId='02')
    
-   # (SELECT * FROM SC WHERE CId = '01')  查询存在01的
+   # SELECT * FROM SC WHERE CId = '01'  查询存在01的
    # SELECT * FROM SC T0 WHERE NOT EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='02')查询不存在02的
    # A & B 所以只需要 A join B即可
    SELECT * FROM (SELECT * FROM SC WHERE CId = '01') T01 JOIN 
    (SELECT * FROM SC T0 WHERE NOT EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='02')) T02 on T01.SId=T02.SId
+   
+   
+   
    ```
+
+   结论：
+
+   1、A & B 一般：A join B on A.id = B.id 即可
+
+   2、A & (~B) 一般：A left join B on A.id = B.id and B.id is NULL
+
+   3、(~A) & B
+
+   4、(~A) & (~B)
+
+   5、A | B
+
+   6、A | (~B)
+
+   7、(~A) | B  等同于: ~(A & (~B) )
+
+   8、(~A) | (~B)  等同于: ~ (A & B)
+
+4. **区别辨析**
+
+   Select * From A join B on exp1 and exp2 
+
+   Select * From A join B on exp1 Where exp2 
 
    
 
-4. Fffddd
+   Select * From A right join B on exp1 and exp2 
+
+   Select * From A right join B on exp1 Where exp2 
+
+5. 
 
  
