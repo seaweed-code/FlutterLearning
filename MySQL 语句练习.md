@@ -93,6 +93,21 @@ insert into SC values('07' , '03' , 98);
     
    ```
 
-3. 
+3. **查询存在" 01 "课程但不存在" 02 "课程的情况**
+
+   ```sql
+   #在Where子语句中嵌套SQL语句
+   SELECT * FROM SC T0 WHERE EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='01') and NOT EXISTS (SELECT * FROM SC T2 WHERE T2.SId=T0.SId and T2.CId='02')
+   
+   # (SELECT * FROM SC WHERE CId = '01')  查询存在01的
+   # SELECT * FROM SC T0 WHERE NOT EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='02')查询不存在02的
+   # A & B 所以只需要 A join B即可
+   SELECT * FROM (SELECT * FROM SC WHERE CId = '01') T01 JOIN 
+   (SELECT * FROM SC T0 WHERE NOT EXISTS (SELECT * FROM SC T1 WHERE T1.SId=T0.SId and T1.CId='02')) T02 on T01.SId=T02.SId
+   ```
+
+   
+
+4. Fffddd
 
  
