@@ -160,9 +160,35 @@ a[i], a[j] = a[j], a[i]
    panic: runtime error: integer divide by zero
   ```
 
-  
-
 - defer 函数调用时的参数，在defer声明时就已经复制了
+
+  ```go
+  package main
+  
+  import (
+      "errors"
+      "fmt"
+  )
+  
+  func foo(a, b int) (i int, err error) {
+      defer fmt.Printf("first defer err %v\n", err) ///作为参数，声明时已复制了error，此时为nil
+      defer func(err error) { fmt.Printf("second defer err %v\n", err) }(err)///作为参数，同上
+      defer func() { fmt.Printf("third defer err %v\n", err) }()///闭包引用
+      if b == 0 {
+          err = errors.New("divided by zero!")
+          return
+      }
+  
+      i = a / b
+      return
+  }
+  
+  func main() {
+      foo(2, 0)
+  }
+  ```
+
+  
 
 - recover函数只能在defer中发挥作用
 
