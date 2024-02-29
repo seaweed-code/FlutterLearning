@@ -131,6 +131,43 @@ a[i], a[j] = a[j], a[i]
 
 #### 8、defer函数
 
+- 多个defer语句，按先进后出的方式执行
+
+- 即使函数返回前发生panic，也能执行defer语句
+
+- 多个 defer 注册，按 FILO 次序执行 ( 先进后出 )。哪怕函数或某个延迟调用发生错误，这些调用依旧会被执行。
+
+  ```go
+  package main
+  
+  func test(x int) {
+      defer println("a")
+      defer println("b")
+  
+      defer func() {
+          println(100 / x) // div0 异常未被捕获，逐步往外传递，最终终止进程。
+      }()
+  
+      defer println("c")
+  }
+  
+  func main() {
+      test(0)
+  }
+  
+  输出结果：
+   c
+   b
+   a
+   panic: runtime error: integer divide by zero
+  ```
+
+  
+
+- defer 函数调用时的参数，在defer声明时就已经复制了
+
+- recover函数只能在defer中发挥作用
+
 #### 9、异常捕获
 
 #### 10、参数传递——pass by Value 传值
@@ -197,9 +234,7 @@ x = <-ch // a receive expression in an assignment statement
   }
   ```
 
-  
-
-#### 14、闭包对外部变量的捕获方式
+  - 对一个nil的channel发送和接收操作会永远阻塞，所以在select语句中操作nil的channel永远都不会被select到。这使得我们可以用nil来激活或者禁用case，来达成处理其它输入或输出事件时超时和取消的逻辑。
 
 #### 15、数组和Slice
 
