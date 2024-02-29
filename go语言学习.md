@@ -173,7 +173,7 @@ a[i], a[j] = a[j], a[i]
   func foo(a, b int) (i int, err error) {
       defer fmt.Printf("first defer err %v\n", err) ///作为参数，声明时已复制了error，此时为nil
       defer func(err error) { fmt.Printf("second defer err %v\n", err) }(err)///作为参数，同上
-      defer func() { fmt.Printf("third defer err %v\n", err) }()///闭包引用
+      defer func() { fmt.Printf("third defer err %v\n", err) }()///闭包引用，使用的是最终值
       if b == 0 {
           err = errors.New("divided by zero!")
           return
@@ -186,9 +186,12 @@ a[i], a[j] = a[j], a[i]
   func main() {
       foo(2, 0)
   }
-  ```
-
   
+  输出：
+  third defer err divided by zero!
+  second defer err <nil>
+  first defer err <nil>
+  ```
 
 - recover函数只能在defer中发挥作用
 
