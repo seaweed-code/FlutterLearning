@@ -195,7 +195,7 @@ a[i], a[j] = a[j], a[i]
   first defer err <nil>
   ```
 
-- recover函数只能在defer中发挥作用
+- recover函数只能在defer中发挥作用，否则无法捕捉到panic
 
   ```go
   package main
@@ -219,6 +219,68 @@ a[i], a[j] = a[j], a[i]
       test()
   }
   ```
+
+-  延迟调用中引发的错误，可被后续延迟调用捕获，但仅最后一个错误可被捕获。
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func test() {
+      defer func() {
+          fmt.Println(recover())
+      }()
+  
+      defer func() {
+          panic("defer panic")
+      }()
+  
+      panic("test panic")
+  }
+  
+  func main() {
+      test()
+  }
+  
+  ///输出:
+  defer panic
+  ```
+
+- 捕获函数 recover 只有在延迟调用内直接调用才会终止错误，否则总是返回 nil。任何未捕获的错误都会沿调用堆栈向外传递
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func test() {
+      defer func() {
+          fmt.Println(recover()) //有效
+      }()
+      defer recover()              //无效！
+      defer fmt.Println(recover()) //无效！
+      defer func() {
+          func() {
+              println("defer inner")
+              recover() //无效！
+          }()
+      }()
+  
+      panic("test panic")
+  }
+  
+  func main() {
+      test()
+  }
+  
+  输出：
+  defer inner
+  <nil>
+  test panic
+  ```
+
+  
 
 - defer 使用陷阱
 
