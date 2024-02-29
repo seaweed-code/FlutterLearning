@@ -280,8 +280,6 @@ a[i], a[j] = a[j], a[i]
   test panic
   ```
 
-  
-
 - defer 使用陷阱
 
   ```go
