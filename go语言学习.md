@@ -172,7 +172,7 @@ a[i], a[j] = a[j], a[i]
   
   func foo(a, b int) (i int, err error) {
       defer fmt.Printf("first defer err %v\n", err) ///作为参数，声明时已复制了error，此时为nil
-      defer func(err error) { fmt.Printf("second defer err %v\n", err) }(err)///作为参数，同上
+      defer func(err error) { fmt.Printf("second defer err %v\n", err) }(err)///作为参数，同上传递了nil
       defer func() { fmt.Printf("third defer err %v\n", err) }()///闭包引用，使用的是最终值
       if b == 0 {
           err = errors.New("divided by zero!")
@@ -194,6 +194,30 @@ a[i], a[j] = a[j], a[i]
   ```
 
 - recover函数只能在defer中发挥作用
+
+- defer 使用陷阱
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func foo() (i int) {
+  
+      i = 0
+      defer func() {
+          fmt.Println(i) ///闭包中引用外部变量
+      }()
+  
+      return 2 ///返回2，编译器会把i设置成2，然后返回，上述defer函数中打印的i值最终会是2
+  }
+  
+  func main() {
+      foo()
+  }
+  ```
+
+- 00
 
 #### 9、异常捕获
 
