@@ -197,6 +197,29 @@ a[i], a[j] = a[j], a[i]
 
 - recover函数只能在defer中发挥作用
 
+  ```go
+  package main
+  
+  import (
+      "fmt"
+  )
+  
+  func test() {
+      var run func() = nil
+      defer run() ///声明OK，运行时crash，因为run为nil
+      fmt.Println("runs")
+  }
+  
+  func main() {
+      defer func() {
+          if err := recover(); err != nil { ///recover函数在defer中使用，可使goroutine得以恢复执行
+              fmt.Println(err)
+          }
+      }()
+      test()
+  }
+  ```
+
 - defer 使用陷阱
 
   ```go
