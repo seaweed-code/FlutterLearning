@@ -242,7 +242,40 @@ a[i], a[j] = a[j], a[i]
   }
   ```
 
-- 
+  ```go
+  package main
+  
+  import "os"
+  
+  func do() (err error) {
+      f, err := os.Open("book.txt")  ///err第一次被赋值
+      if err != nil {
+          return err
+      }
+  
+      if f != nil {
+          defer func() {
+              if ferr := f.Close(); ferr != nil {
+                  err = ferr ///err第三次被赋值,最后返回的err是这里的值
+              }
+          }()
+      }
+  
+      // ..code...
+  
+      return nil ////err第二次被赋值为nil
+  }
+  
+  func main() {
+      do()
+  }
+  ```
+
+  
+
+
+
+
 
 #### 9、异常捕获
 
