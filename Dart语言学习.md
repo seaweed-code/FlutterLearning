@@ -90,10 +90,12 @@
 
     【编译器无法保证，**需要开发人员自己保证读取前变量已初始化**，否则抛异常】
 
+    
+
     ```dart
     void fun(bool isEmpty) {
         late int lineCount;///late类型变量，必须是非空，
-      
+        late String result = _getResult(); ////如果result未被使用，则_getResult则永远不执行
        ///下面的if/else两个分支，有一个对lineCount进行初始化即可。都不初始化则编译器会报错
         if (isEmpty) {///如果运行时，执行到这则奔溃，因为lineCount没有初始化
           // lineCount = 0;///OK，
@@ -264,9 +266,9 @@
 
   
 
-- ### 一切皆对象（除了Null）
+- ### 一切皆对象
 
-  除了Null类型，其他类型都是Object的子类型。
+  其他类型都是Object的子类型。
 
 - ### 闭包对局部变量的捕获
 
