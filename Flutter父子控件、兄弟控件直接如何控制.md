@@ -164,7 +164,7 @@
      }
      ```
 
-   - 兄弟节点互相刷新
+   - 兄弟节点互相刷新【原理同上】
 
 2. #### 使用ChangeNotify发送通知配合ListenableBuilder监听通知刷新
 
