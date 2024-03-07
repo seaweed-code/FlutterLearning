@@ -166,7 +166,7 @@
 
    - 兄弟节点互相刷新
 
-2. #### 配合使用ChangeNotify发送通知以及ListenableBuilder监听通知刷新
+2. #### 使用ChangeNotify发送通知配合ListenableBuilder监听通知刷新
 
    - 子控件刷新父控件
    - 父控件刷新子控件
