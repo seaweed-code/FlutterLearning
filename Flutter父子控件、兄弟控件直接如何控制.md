@@ -4,6 +4,77 @@
 
    - 子控件刷新父控件
 
+     ```dart
+     
+     class MyHomePage extends StatefulWidget {
+       const MyHomePage({super.key, required this.title});
+     
+       final String title;
+     
+       @override
+       State<MyHomePage> createState() => _MyHomePageState();
+     }
+     
+     class _MyHomePageState extends State<MyHomePage> {
+       int _idx = 0;
+       @override
+       Widget build(BuildContext context) {
+         return Scaffold(
+           appBar: AppBar(
+             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+             title: Text(widget.title + "$_idx"),
+           ),
+           body: CenterWidget(
+             fun: () {///传递一个函数给子控件，子控件调用该函数触发自己界面刷新
+               setState(() {
+                 _idx++;
+               });
+             },
+           ),
+           floatingActionButton: FloatingActionButton(
+             onPressed: () {
+               setState(() {
+                 _idx++;
+               });
+             },
+             tooltip: 'Increment',
+             child: const Icon(Icons.add),
+           ),
+         );
+       }
+     }
+     
+     class CenterWidget extends StatefulWidget {
+       CenterWidget({super.key, required this.fun});
+     
+       final VoidCallback fun;
+       @override
+       State<CenterWidget> createState() => _CenterWidgetState();
+     }
+     
+     class _CenterWidgetState extends State<CenterWidget> {
+       @override
+       Widget build(BuildContext context) {
+         return Center(
+             child: Column(
+           crossAxisAlignment: CrossAxisAlignment.stretch,
+           mainAxisSize: MainAxisSize.min,
+           children: [
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: ElevatedButton(
+                 onPressed: widget.fun,////子控件内部，调用外部传入的方法，触发父控件刷新
+                 child: Text("Add"),
+               ),
+             )
+           ],
+         ));
+       }
+     }
+     ```
+
+     
+
    - 父控件刷新子控件
 
      ```dart

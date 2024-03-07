@@ -46,24 +46,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final FunCall optChildWidget = FunCall();
-
+  int _idx = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(widget.title + "$_idx"),
       ),
       body: CenterWidget(
-        fun: optChildWidget,
+        fun: () {
+          setState(() {
+            _idx++;
+          });
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (optChildWidget.update != null) {
-            ///操作child widget
-            optChildWidget.update!();
-          }
+          setState(() {
+            _idx++;
+          });
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
@@ -72,34 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class FunCall {
-  ///child widget 回传给parrent widget
-  VoidCallback? update;
-}
-
 class CenterWidget extends StatefulWidget {
   CenterWidget({super.key, required this.fun});
 
-  final FunCall fun;
+  final VoidCallback fun;
   @override
   State<CenterWidget> createState() => _CenterWidgetState();
 }
 
 class _CenterWidgetState extends State<CenterWidget> {
-  int _counter = 0;
-
-  @override
-  void initState() {
-    ///设置，由自己的父控件调用来刷新自己
-    widget.fun.update = () {
-      setState(() {
-        _counter++;
-      });
-    };
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -107,14 +90,10 @@ class _CenterWidgetState extends State<CenterWidget> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          "aaaa ${_counter}",
-          textAlign: TextAlign.center,
-        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
-            onPressed: widget.fun.update,
+            onPressed: widget.fun,
             child: Text("Add"),
           ),
         )
