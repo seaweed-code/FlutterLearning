@@ -17,7 +17,7 @@
      }
      
      class _MyHomePageState extends State<MyHomePage> {
-       final FunCall optChildWidget = FunCall();
+       final FunCall optChildWidget = FunCall();///由子控件去设置函数，然后自己来调用
      
        @override
        Widget build(BuildContext context) {
@@ -27,13 +27,12 @@
              title: Text(widget.title),
            ),
            body: CenterWidget(
-             fun: optChildWidget,
+             fun: optChildWidget,///传递给子控件，设置好刷新函数
            ),
            floatingActionButton: FloatingActionButton(
              onPressed: () {
                if (optChildWidget.update != null) {
-                 ///操作child widget
-                 optChildWidget.update!();
+                 optChildWidget.update!();///通知子控件进行刷新
                }
              },
              tooltip: 'Increment',
