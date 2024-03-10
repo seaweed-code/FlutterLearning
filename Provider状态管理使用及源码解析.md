@@ -44,6 +44,8 @@ version: 6.1.2
 
 5. ### MultiProvider避免多层嵌套
 
+   注意，由于继承自Nested类，会自动把providers数组中的Provider按序设置成父子关系，所以若数组元素中某个Provider含有child参数则会无效，因为Nested会自动把它下一个元素设置为它的child
+
    ```dart
    /// A provider that merges multiple providers into a single linear widget tree.
    /// It is used to improve readability and reduce boilerplate code of having to
