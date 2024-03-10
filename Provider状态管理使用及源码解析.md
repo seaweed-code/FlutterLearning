@@ -48,7 +48,7 @@ version: 6.1.2
 
 7. ### Selector
 
-   一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。
+   一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。它本身也是全量监听了模型的变化，只不过其内部做了判断，是否需要部分刷新，底层逻辑没有用到InheritedWidget中的Aspect字段。
 
    ```dart
    class Selector<A, S> extends Selector0<S> {
