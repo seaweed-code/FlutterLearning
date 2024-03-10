@@ -81,7 +81,7 @@ version: 6.1.2
 
    ```dart
    class InheritedProvider<T> extends SingleChildStatelessWidget {
-     ///create方法返回共享数据
+     ///携带一个，从create方法返回的数据作为共享数据
      InheritedProvider({
        Key? key,
        Create<T>? create,
@@ -104,7 +104,7 @@ version: 6.1.2
            ),
            super(key: key, child: child);
    
-     /// 返回一个已经存在的数据，Provider从数中移除时不会自动dispose模型
+     /// 携带一个已经存在的数据，Provider从数中移除时不会自动dispose模型
      InheritedProvider.value({
        Key? key,
        required T value,
@@ -134,35 +134,6 @@ version: 6.1.2
      final _Delegate<T> _delegate;
      final bool? _lazy;
    
-     /// Syntax sugar for obtaining a [BuildContext] that can read the provider
-     /// created.
-     ///
-     /// This code:
-     ///
-     /// ```dart
-     /// Provider<int>(
-     ///   create: (context) => 42,
-     ///   builder: (context, child) {
-     ///     final value = context.watch<int>();
-     ///     return Text('$value');
-     ///   }
-     /// )
-     /// ```
-     ///
-     /// is strictly equivalent to:
-     ///
-     /// ```dart
-     /// Provider<int>(
-     ///   create: (context) => 42,
-     ///   child: Builder(
-     ///     builder: (context) {
-     ///       final value = context.watch<int>();
-     ///       return Text('$value');
-     ///     },
-     ///   ),
-     /// )
-     /// ```
-     ///
      /// For an explanation on the `child` parameter that `builder` receives,
      /// see the "Performance optimizations" section of [AnimatedBuilder].
      final TransitionBuilder? builder;
