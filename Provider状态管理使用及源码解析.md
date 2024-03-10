@@ -127,11 +127,10 @@ version: 6.1.2
      /// ```dart
      /// Widget build(BuildContext context) {
      ///   final name = context.select((Person p) => p.name);
-     ///
+     ///   当且仅当name字段变化时会自动刷新
      ///   return Text(name);
      /// }
      /// ```
-     ///
      /// It is fine to call `select` multiple times.
      R select<T, R>(R Function(T value) selector) {
        ///从当前context找到最近的Provider<T>
@@ -155,7 +154,6 @@ version: 6.1.2
            dependOnInheritedWidgetOfExactType<_InheritedProviderScope<T?>>();
          }
          return selected;
-       
      }
    }
    ```
