@@ -66,6 +66,57 @@ version: 6.1.2
              child: child,
            );
    }
+   
+   class Selector0<T> extends SingleChildStatefulWidget {
+     Selector0({
+       Key? key,
+       required this.builder,
+       required this.selector,
+       ShouldRebuild<T>? shouldRebuild,
+       Widget? child,
+     })  : _shouldRebuild = shouldRebuild,
+           super(key: key, child: child);
+   
+    
+     final ValueWidgetBuilder<T> builder;
+   
+     final T Function(BuildContext) selector;
+   
+     final ShouldRebuild<T>? _shouldRebuild;
+   
+     @override
+     _Selector0State<T> createState() => _Selector0State<T>();
+   }
+   
+   class _Selector0State<T> extends SingleChildState<Selector0<T>> {
+     T? value;
+     Widget? cache;
+     Widget? oldWidget;
+   
+     @override
+     Widget buildWithChild(BuildContext context, Widget? child) {
+       final selected = widget.selector(context);
+   
+       final shouldInvalidateCache = oldWidget != widget ||
+           (widget._shouldRebuild != null &&
+               widget._shouldRebuild!(value as T, selected)) ||
+           (widget._shouldRebuild == null &&
+               !const DeepCollectionEquality().equals(value, selected));
+       if (shouldInvalidateCache) {
+         value = selected;
+         oldWidget = widget;
+         cache = Builder(
+           builder: (context) => widget.builder(
+             context,
+             selected,
+             child,
+           ),
+         );
+       }
+       return cache!;
+     }
+     
+   }
    ```
 
    
