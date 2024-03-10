@@ -92,17 +92,17 @@ version: 6.1.2
    
      @override
      Widget buildWithChild(BuildContext context, Widget? child) {
-       final selected = widget.selector(context);
+       final selected = widget.selector(context);///用户感兴趣的数据
    
        final shouldInvalidateCache = oldWidget != widget ||
            (widget._shouldRebuild != null &&
                widget._shouldRebuild!(value as T, selected)) ||
            (widget._shouldRebuild == null &&
-               !const DeepCollectionEquality().equals(value, selected));
+               !const DeepCollectionEquality().equals(value, selected));///数据有没有发生变化
        if (shouldInvalidateCache) {
          value = selected;
          oldWidget = widget;
-         cache = Builder(
+         cache = Builder(///重新构建新的Widget
            builder: (context) => widget.builder(
              context,
              selected,
