@@ -53,6 +53,15 @@ version: 6.1.2
    1、一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。它本身也是全量监听了模型的变化，只不过其内部做了判断，是否需要部分刷新，底层逻辑没有用到InheritedWidget中的Aspect字段。源码如下：
 
    ```dart
+   /// 在dart 3.0后要做到同时监听多个属性最简单的方式就是使用Dart语言中的`Records`类型（类似于swift中元组，C++结构体），而不用去重新定义一个类再重写==方法
+   /// ```dart
+   /// Selector<Foo, ({String item1, String item2})>(
+   ///   selector: (_, foo) => (item1: foo.item1, item2: foo.item2),///监听item1和item2
+   ///   builder: (_, data, __) {
+   ///     return Text('${data.item1}  ${data.item2}');
+   ///   },
+   /// );
+   /// ```
    class Selector<A, S> extends Selector0<S> {
      Selector({
        Key? key,
