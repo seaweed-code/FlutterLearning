@@ -20,6 +20,72 @@ version: 6.1.2
 
 2. ### ListenableProvider
 
+   父类：InheritedProvider
+
+   起作用与ChangeNotifierProvider一样，只不过他可以监听更为原始的Listenable类型的模型
+
+   ```dart
+   /// Listens to a [Listenable], expose it to its descendants and rebuilds
+   /// dependents whenever the listener emits an event.
+   ///
+   /// For usage information, see [ChangeNotifierProvider], a subclass of
+   /// [ListenableProvider] made for [ChangeNotifier].
+   ///
+   /// You will generally want to use [ChangeNotifierProvider] instead.
+   /// But [ListenableProvider] is available in case you want to implement
+   /// [Listenable] yourself, or use [Animation].
+   class ListenableProvider<T extends Listenable?> extends InheritedProvider<T> {
+     /// Creates a [Listenable] using [create] and subscribes to it.
+     ///
+     /// [dispose] can optionally passed to free resources
+     /// when [ListenableProvider] is removed from the tree.
+     ///
+     /// [create] must not be `null`.
+     ListenableProvider({
+       Key? key,
+       required Create<T> create,
+       Dispose<T>? dispose,
+       bool? lazy,
+       TransitionBuilder? builder,
+       Widget? child,
+     }) : super(
+             key: key,
+             startListening: _startListening,
+             create: create,
+             dispose: dispose,
+             lazy: lazy,
+             builder: builder,
+             child: child,
+           );
+   
+     /// Provides an existing [Listenable].
+     ListenableProvider.value({
+       Key? key,
+       required T value,
+       UpdateShouldNotify<T>? updateShouldNotify,
+       TransitionBuilder? builder,
+       Widget? child,
+     }) : super.value(
+             key: key,
+             builder: builder,
+             value: value,
+             updateShouldNotify: updateShouldNotify,
+             startListening: _startListening,
+             child: child,
+           );
+   
+     static VoidCallback _startListening(
+       InheritedContext<Listenable?> e,
+       Listenable? value,
+     ) {
+       value?.addListener(e.markNeedsNotifyDependents);
+       return () => value?.removeListener(e.markNeedsNotifyDependents);
+     }
+   }
+   ```
+
+   
+
 3. ### InheritedProvider
 
    ```
