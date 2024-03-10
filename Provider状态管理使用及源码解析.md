@@ -42,7 +42,7 @@ version: 6.1.2
 
    2、 可依赖上面其他模型（依赖于上面一个或多个Parrent Provider的数据。当其上面依赖的数据发送变化，自己携带的数据也会自动更新）。
 
-5. ### MultiProvider
+5. ### MultiProvider避免多层嵌套
 
    ```dart
    /// A provider that merges multiple providers into a single linear widget tree.
