@@ -12,6 +12,8 @@ version: 6.1.2
 
    2、如果下面的控件读取（read）ChangeNotifierProvider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
 
+   3、数据模型必须继承ChangeNotifier，且需要手动调用notifyListeners方法才能通知到ChangeNotifierProvider rebuild，从而触发InheritedWidget的逻辑->rebuild all dependents
+
 2. ### Provider
 
    该组件携带一个数据模型，共享给下面的所有child widget 访问(read)，但不能监听(watch)。你可能要问，那有何用？为何不直接使用全局变量？好处在于当Provider在树中被移除，数据模型也会被释放。
@@ -116,7 +118,7 @@ version: 6.1.2
    }
    ```
 
-   2、部分监听，也可以使用context的select方法，源码如下，可以看到这个方法不如上面的方式灵活。例如，如果我想监听模型的属性A变化 且 B 没有变化时刷新UI，或者我想监听多个模型的某些属性变化 等复杂逻辑，下面的方法则无法支持。
+   2、部分监听，也可以使用context的select方法，源码如下，可以看到这个方法不如上面的方式灵活。但是底层使用了InheritedWidget Aspect参数来保存获取感兴趣的部分数据，例如，如果我想监听模型的属性A变化 且 B 没有变化时刷新UI，或者我想监听多个模型的某些属性变化 等复杂逻辑，下面的方法则无法支持。
 
    ```dart
    extension SelectContext on BuildContext {
