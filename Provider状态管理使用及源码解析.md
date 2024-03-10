@@ -42,4 +42,32 @@ version: 6.1.2
 
 5. ### MultiProvider
 
-### 
+6. ### Consumer
+
+   一个Consumer就是一个监听者，可以监听上面一个或多个数据模型的变化。
+
+7. ### Selector
+
+   一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。
+
+   ```dart
+   class Selector<A, S> extends Selector0<S> {
+     Selector({
+       Key? key,
+       required ValueWidgetBuilder<S> builder,
+       required S Function(BuildContext, A) selector,
+       ShouldRebuild<S>? shouldRebuild,
+       Widget? child,
+     }) : super(
+             key: key,
+             shouldRebuild: shouldRebuild,
+             builder: builder,
+             selector: (context) => selector(context, Provider.of(context)),///此处最为关键，这里的context相当于中间商，它会监听模型A的任何变化，A一旦有任何改变contenx代表widget会被rebuild，但是内部会根据shouldRebuild来判断是否需要重新rebuild其child
+             child: child,
+           );
+   }
+   ```
+
+   
+
+8. 
