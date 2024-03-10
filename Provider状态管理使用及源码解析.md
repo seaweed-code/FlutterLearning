@@ -4,7 +4,9 @@ version: 6.1.2
 
 1. ### ChangeNotifierProvider
 
-   父类：ListenableProvider，主要区别在于ListenableProvider监听的是Listenable模型，而ChangeNotifierProvider则监听ChangeNotifier模型（一种Listenable）。如果需要自定义Listenable或者监听其他Listenable例如Animation，则可以使用父类。
+   **父类：**ListenableProvider，主要区别在于ListenableProvider监听的是Listenable模型，而ChangeNotifierProvider则监听ChangeNotifier模型（一种Listenable）。如果需要自定义Listenable或者监听其他Listenable例如Animation，则可以使用父类。
+
+   **功能：**自己会监听一个ChangeNotifier模型，一旦模型改变后，会调用markNeedsNotifyDependents，通知所有依赖者rebuild
 
    
 
@@ -20,7 +22,7 @@ version: 6.1.2
 
 2. ### ListenableProvider
 
-   父类：InheritedProvider
+   **父类：**InheritedProvider
 
    起作用与ChangeNotifierProvider一样，只不过他可以监听更为原始的Listenable类型的模型
 
