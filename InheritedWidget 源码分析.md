@@ -166,7 +166,9 @@ class InheritedElement extends ProxyElement {
 
 
 
+### 子类InheritedModelElement可以更加细粒度监听部分变化
 
+上述InheritedWidget一旦rebuild，会无差别的通知他的所有监听者，然而实际情况中，有些监听者只关心Model中的部分变化，InheritedWidget就无能为力了，这时候就可以使用子类InheritedModel，可以更细腻的控制
 
 ```dart
 class InheritedModelElement<T> extends InheritedElement {
