@@ -6,7 +6,11 @@ version: 6.1.2
 
   这是使用最多的组件，基于inheritedWidget实现。该组件携带一个数据模型，共享给下面的所有child widget 访问(read)、监听(watch)。
 
-  
+  由此可知：
+
+  1、如果下面的控件监听（watch）ChangeNotifierProvider携带的数据变化，数据改变后会收到通知的
+
+  2、如果下面的控件读取（read）ChangeNotifierProvider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
 
 - ### Provider
 
