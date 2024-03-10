@@ -18,7 +18,7 @@ version: 6.1.2
 
    2、如果下面的控件读取（read）ChangeNotifierProvider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
 
-   3、数据模型必须继承ChangeNotifier，且需要手动调用notifyListeners方法才能通知到ChangeNotifierProvider rebuild，从而触发InheritedWidget的逻辑->rebuild all dependents
+   3、数据模型必须继承ChangeNotifier，且需要手动调用notifyListeners方法才能rebuild all dependents
 
 2. ### ListenableProvider
 
