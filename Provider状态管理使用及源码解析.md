@@ -4,6 +4,10 @@ version: 6.1.2
 
 1. ### ChangeNotifierProvider
 
+   父类：ListenableProvider，主要区别在于ListenableProvider监听的是Listenable模型，而ChangeNotifierProvider则监听ChangeNotifier模型（一种Listenable）。如果需要自定义Listenable或者监听其他Listenable例如Animation，则可以使用父类。
+
+   
+
    这是使用最多的组件，基于inheritedWidget实现。该组件携带一个数据模型，共享给下面的所有child widget 访问(read)、监听(watch)。
 
    由此可知：
@@ -14,7 +18,17 @@ version: 6.1.2
 
    3、数据模型必须继承ChangeNotifier，且需要手动调用notifyListeners方法才能通知到ChangeNotifierProvider rebuild，从而触发InheritedWidget的逻辑->rebuild all dependents
 
-2. ### Provider
+2. ### ListenableProvider
+
+3. ### InheritedProvider
+
+   ```
+   
+   ```
+
+   
+
+4. ### Provider
 
    该组件携带一个数据模型，共享给下面的所有child widget 访问(read)，但不能监听(watch)。你可能要问，那有何用？为何不直接使用全局变量？好处在于当Provider在树中被移除，数据模型也会被释放。
 
@@ -24,7 +38,7 @@ version: 6.1.2
 
    2、如果下面的控件读取（read）Provider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
 
-3. ### ProxyProvider
+5. ### ProxyProvider
 
    该组件功能包括 ：
 
@@ -34,7 +48,7 @@ version: 6.1.2
 
    
 
-4. ### ChangeNotifierProxyProvider
+6. ### ChangeNotifierProxyProvider
 
    该组件功能包括 ：
 
@@ -42,7 +56,7 @@ version: 6.1.2
 
    2、 可依赖上面其他模型（依赖于上面一个或多个Parrent Provider的数据。当其上面依赖的数据发送变化，自己携带的数据也会自动更新）。
 
-5. ### MultiProvider避免多层嵌套
+7. ### MultiProvider避免多层嵌套
 
    注意，由于继承自Nested类，会自动把providers数组中的Provider按序设置成父子关系，所以若数组元素中某个Provider含有child参数则会无效，因为Nested会自动把它下一个元素设置为它的child
 
@@ -98,7 +112,7 @@ version: 6.1.2
 
    
 
-6. ### Consumer 监听所有数据变化
+8. ### Consumer 监听所有数据变化
 
    一个Consumer就是一个监听者，可以监听上面一个或多个数据模型的变化。
 
@@ -129,7 +143,7 @@ version: 6.1.2
 
    
 
-7. ### Selector 监听部分数据变化
+9. ### Selector 监听部分数据变化
 
    1、一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。它本身也是全量监听了模型的变化，只不过其内部做了判断，是否需要部分刷新，底层逻辑没有用到InheritedWidget中的Aspect字段。源码如下：
 
@@ -252,4 +266,4 @@ version: 6.1.2
 
    
 
-8. 
+10. 
