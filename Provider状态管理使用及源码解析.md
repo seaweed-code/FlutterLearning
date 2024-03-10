@@ -131,23 +131,12 @@ version: 6.1.2
            _delegate = delegate,
            super(key: key, child: child);
    
-     final _Delegate<T> _delegate;
-     final bool? _lazy;
+     final _Delegate<T> _delegate;///实际数据保存在此
+     final bool? _lazy;///是否需要懒加载
    
      /// For an explanation on the `child` parameter that `builder` receives,
      /// see the "Performance optimizations" section of [AnimatedBuilder].
      final TransitionBuilder? builder;
-   
-     @override
-     void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-       super.debugFillProperties(properties);
-       _delegate.debugFillProperties(properties);
-     }
-   
-     @override
-     _InheritedProviderElement<T> createElement() {
-       return _InheritedProviderElement<T>(this);
-     }
    
      @override
      Widget buildWithChild(BuildContext context, Widget? child) {
