@@ -131,7 +131,7 @@ version: 6.1.2
            _delegate = delegate,
            super(key: key, child: child);
    
-     final _Delegate<T> _delegate;///实际数据保存在此
+     final _Delegate<T> _delegate;///实际数据保存在此_ValueInheritedProvider or _CreateInheritedProvider
      final bool? _lazy;///是否需要懒加载
    
      /// For an explanation on the `child` parameter that `builder` receives,
