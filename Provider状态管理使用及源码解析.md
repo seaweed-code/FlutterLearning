@@ -165,7 +165,7 @@ version: 6.1.2
        required this.builder,
        required this.selector,
        ShouldRebuild<T>? shouldRebuild,
-       Widget? child,
+       Widget? child,///作为缓存优化使用，自动传给builder方法
      })  : _shouldRebuild = shouldRebuild,
            super(key: key, child: child);
      
