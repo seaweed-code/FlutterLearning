@@ -48,7 +48,7 @@ version: 6.1.2
 
 7. ### Selector 监听部分数据变化
 
-   一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。它本身也是全量监听了模型的变化，只不过其内部做了判断，是否需要部分刷新，底层逻辑没有用到InheritedWidget中的Aspect字段。源码如下：
+   1、一个Selector也是一个监听者，与Consumer不同的是，可选择性监听部分变化。它本身也是全量监听了模型的变化，只不过其内部做了判断，是否需要部分刷新，底层逻辑没有用到InheritedWidget中的Aspect字段。源码如下：
 
    ```dart
    class Selector<A, S> extends Selector0<S> {
@@ -113,6 +113,95 @@ version: 6.1.2
        return cache!;
      }
      
+   }
+   ```
+
+   2、部分监听，也可以使用context的select方法
+
+   ```dart
+   extension SelectContext on BuildContext {
+     /// Watch a value of type [T] exposed from a provider, and mark this widget for rebuild
+     /// on changes of that value.
+     ///
+     /// If [T] is nullable and no matching providers are found, [watch] will
+     /// return `null`. Otherwise if [T] is non-nullable, will throw [ProviderNotFoundException].
+     /// If [T] is non-nullable and the provider obtained returned `null`, will
+     /// throw [ProviderNullException].
+     ///
+     /// This allows widgets to optionally depend on a provider:
+     ///
+     /// ```dart
+     /// runApp(
+     ///   Builder(builder: (context) {
+     ///     final title = context.select<Movie?, String>((movie) => movie?.title);
+     ///
+     ///     if (title == null) Text('no Movie found');
+     ///     return Text(title);
+     ///   }),
+     /// );
+     /// ```
+     ///
+     /// [select] must be used only inside the `build` method of a widget.
+     /// It will not work inside other life-cycles, including [State.didChangeDependencies].
+     ///
+     /// By using [select], instead of watching the entire object, the listener will
+     /// rebuild only if the value returned by `selector` changes.
+     ///
+     /// When a provider emits an update, it will call synchronously all `selector`.
+     ///
+     /// Then, if they return a value different from the previously returned value,
+     /// the dependent will be marked as needing to rebuild.
+     ///
+     /// For example, consider the following object:
+     ///
+     /// ```dart
+     /// class Person with ChangeNotifier {
+     ///   String name;
+     ///   int age;
+     ///
+     ///   // Add some logic that may update `name` and `age`
+     /// }
+     /// ```
+     ///
+     /// Then a widget may want to listen to a person's `name` without listening
+     /// to its `age`.
+     ///
+     /// This cannot be done using `context.watch`/[Provider.of]. Instead, we
+     /// can use [select], by writing the following:
+     ///
+     /// ```dart
+     /// Widget build(BuildContext context) {
+     ///   final name = context.select((Person p) => p.name);
+     ///
+     ///   return Text(name);
+     /// }
+     /// ```
+     ///
+     /// It is fine to call `select` multiple times.
+     R select<T, R>(R Function(T value) selector) {
+       ///从当前context找到最近的Provider<T>
+         final inheritedElement = Provider._inheritedElementOf<T>(this);
+      ///取出里面的数据
+         final value = inheritedElement?.value;
+      ///调用selector得到用户感兴趣的字段内容
+         final selected = selector(value);
+   
+         if (inheritedElement != null) {
+           dependOnInheritedElement(////设置依赖，Aspect是一个函数
+             inheritedElement,
+             aspect: (T? newValue) {
+               return !const DeepCollectionEquality()
+                   .equals(selector(newValue), selected);
+             },
+           );
+         } else {
+           // tell Flutter to rebuild the widget when relocated using GlobalKey
+           // if no provider were found before.
+           dependOnInheritedWidgetOfExactType<_InheritedProviderScope<T?>>();
+         }
+         return selected;
+       
+     }
    }
    ```
 
