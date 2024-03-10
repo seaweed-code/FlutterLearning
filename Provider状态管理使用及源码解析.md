@@ -80,8 +80,8 @@ version: 6.1.2
      MultiProvider({
        Key? key,
        required List<SingleChildWidget> providers,
-       Widget? child,
-       TransitionBuilder? builder,
+       Widget? child,///为了优化使用，当builder被多次调用时，child不会重新创建，会原封不动的传递给builder，然而此处builder并不会被多次调用，所以此处的优化其实并没有意义
+       TransitionBuilder? builder,///动态构建child
      }) : super(
              key: key,
              children: providers,
