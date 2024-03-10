@@ -268,6 +268,31 @@ version: 6.1.2
 
    2、 可依赖上面其他模型（依赖于上面一个或多个Parrent Provider的数据。当其上面依赖的数据发送变化，自己携带的数据也会自动更新）。
 
+   ```dart
+   class ChangeNotifierProxyProvider<T, R extends ChangeNotifier?>
+       extends ListenableProxyProvider<T, R> {
+     
+     ChangeNotifierProxyProvider({
+       Key? key,
+       required Create<R> create,
+       required ProxyProviderBuilder<T, R> update,
+       bool? lazy,
+       TransitionBuilder? builder,
+       Widget? child,
+     }) : super(
+             key: key,
+             create: create,
+             update: update,
+             dispose: ChangeNotifierProvider._dispose,
+             lazy: lazy,
+             builder: builder,
+             child: child,
+           );
+   }
+   ```
+
+   
+
 7. ### MultiProvider避免多层嵌套
 
    注意，由于继承自Nested类，会自动把providers数组中的Provider按序设置成父子关系，所以若数组元素中某个Provider含有child参数则会无效，因为Nested会自动把它下一个元素设置为它的child
