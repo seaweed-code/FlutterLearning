@@ -44,6 +44,58 @@ version: 6.1.2
 
 5. ### MultiProvider
 
+   ```dart
+   /// A provider that merges multiple providers into a single linear widget tree.
+   /// It is used to improve readability and reduce boilerplate code of having to
+   /// nest multiple layers of providers.
+   ///
+   /// As such, we're going from:
+   ///
+   /// ```dart
+   /// Provider<Something>(
+   ///   create: (_) => Something(),
+   ///   child: Provider<SomethingElse>(
+   ///     create: (_) => SomethingElse(),
+   ///     child: Provider<AnotherThing>(
+   ///       create: (_) => AnotherThing(),
+   ///       child: someWidget,
+   ///     ),
+   ///   ),
+   /// ),
+   /// ```
+   ///
+   /// To:
+   ///
+   /// ```dart
+   /// MultiProvider(
+   ///   providers: [
+   ///     Provider<Something>(create: (_) => Something()),
+   ///     Provider<SomethingElse>(create: (_) => SomethingElse()),
+   ///     Provider<AnotherThing>(create: (_) => AnotherThing()),
+   ///   ],
+   ///   child: someWidget,
+   /// )
+   /// ```
+   class MultiProvider extends Nested {
+     MultiProvider({
+       Key? key,
+       required List<SingleChildWidget> providers,
+       Widget? child,
+       TransitionBuilder? builder,
+     }) : super(
+             key: key,
+             children: providers,
+             child: builder != null
+                 ? Builder(
+                     builder: (context) => builder(context, child),
+                   )
+                 : child,
+           );
+   }
+   ```
+
+   
+
 6. ### Consumer 监听所有数据变化
 
    一个Consumer就是一个监听者，可以监听上面一个或多个数据模型的变化。
