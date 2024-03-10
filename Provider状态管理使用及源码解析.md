@@ -120,54 +120,9 @@ version: 6.1.2
 
    ```dart
    extension SelectContext on BuildContext {
-     /// Watch a value of type [T] exposed from a provider, and mark this widget for rebuild
-     /// on changes of that value.
-     ///
-     /// If [T] is nullable and no matching providers are found, [watch] will
-     /// return `null`. Otherwise if [T] is non-nullable, will throw [ProviderNotFoundException].
-     /// If [T] is non-nullable and the provider obtained returned `null`, will
-     /// throw [ProviderNullException].
-     ///
-     /// This allows widgets to optionally depend on a provider:
-     ///
-     /// ```dart
-     /// runApp(
-     ///   Builder(builder: (context) {
-     ///     final title = context.select<Movie?, String>((movie) => movie?.title);
-     ///
-     ///     if (title == null) Text('no Movie found');
-     ///     return Text(title);
-     ///   }),
-     /// );
-     /// ```
-     ///
-     /// [select] must be used only inside the `build` method of a widget.
-     /// It will not work inside other life-cycles, including [State.didChangeDependencies].
-     ///
-     /// By using [select], instead of watching the entire object, the listener will
-     /// rebuild only if the value returned by `selector` changes.
-     ///
-     /// When a provider emits an update, it will call synchronously all `selector`.
-     ///
-     /// Then, if they return a value different from the previously returned value,
-     /// the dependent will be marked as needing to rebuild.
-     ///
-     /// For example, consider the following object:
-     ///
-     /// ```dart
-     /// class Person with ChangeNotifier {
-     ///   String name;
-     ///   int age;
-     ///
-     ///   // Add some logic that may update `name` and `age`
-     /// }
-     /// ```
-     ///
-     /// Then a widget may want to listen to a person's `name` without listening
-     /// to its `age`.
-     ///
-     /// This cannot be done using `context.watch`/[Provider.of]. Instead, we
-     /// can use [select], by writing the following:
+     ///如果一个widget只想监听 peson 模型的 name字段，但是不想监听age字段
+     /// 你就不能使用`context.watch`/[Provider.of]. 等方法
+     /// 我们可以使用 [select], 代码示例:
      ///
      /// ```dart
      /// Widget build(BuildContext context) {
