@@ -58,15 +58,16 @@ version: 6.1.2
              builder: builder,
              value: value,
              updateShouldNotify: updateShouldNotify,
-             startListening: _startListening,
-             child: child,
+             startListening: _startListening,///当调用_startListening时就已经添加了监听，当调用返回值则取消监听
+             child: child,///作为优化使用
            );
    
+     ///全局函数
      static VoidCallback _startListening(
        InheritedContext<Listenable?> e,
        Listenable? value,
      ) {
-       value?.addListener(e.markNeedsNotifyDependents);
+       value?.addListener(e.markNeedsNotifyDependents);///监听方法就是通知InheritedWidget更新其所有依赖
        return () => value?.removeListener(e.markNeedsNotifyDependents);
      }
    }
