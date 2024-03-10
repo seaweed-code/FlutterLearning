@@ -76,10 +76,10 @@ version: 6.1.2
        Widget? child,
      })  : _shouldRebuild = shouldRebuild,
            super(key: key, child: child);
-   
-     final ValueWidgetBuilder<T> builder;
-     final T Function(BuildContext) selector;
-     final ShouldRebuild<T>? _shouldRebuild;
+     
+     final ValueWidgetBuilder<T> builder;///数据变化后，需要刷新则会调用重新构建子widget
+     final T Function(BuildContext) selector;///对哪个字段感兴趣？就返回哪个字段
+     final ShouldRebuild<T>? _shouldRebuild;///如果感兴趣的内容没有发生变化则不需要更新
    
      @override
      _Selector0State<T> createState() => _Selector0State<T>();
