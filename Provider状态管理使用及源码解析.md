@@ -24,7 +24,7 @@ version: 6.1.2
 
    **父类：**InheritedProvider
 
-   **作用：**与ChangeNotifierProvider一样，只不过他可以监听更为原始的Listenable类型的模型
+   **作用：**与ChangeNotifierProvider一样，只不过他可以监听更为原始的Listenable类型的模型，通过源码可知，其底层原理是收到消息后，直接调用InheritedContext的markNeedsNotifyDependents方法通知所以依赖更新，而不是通过rebuild InheritedWidget来触发。
 
    **QA**：下面两个构造函数：传create，和传value又何区别呢？
 
