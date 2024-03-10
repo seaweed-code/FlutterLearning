@@ -116,7 +116,7 @@ version: 6.1.2
    }
    ```
 
-   2、部分监听，也可以使用context的select方法
+   2、部分监听，也可以使用context的select方法，源码如下，可以看到这个方法不如上面的方式灵活。例如，如果我想监听模型的属性A变化 且 B 没有变化时刷新UI，或者我想监听多个模型的某些属性变化 等复杂逻辑，下面的方法则无法支持。
 
    ```dart
    extension SelectContext on BuildContext {
