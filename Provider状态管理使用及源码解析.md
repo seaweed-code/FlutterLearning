@@ -138,6 +138,7 @@ version: 6.1.2
      /// see the "Performance optimizations" section of [AnimatedBuilder].
      final TransitionBuilder? builder;
    
+     ///一旦调用下面的方法，才能通知所有的依赖者rebuild,但是什么时候会被调用呢？
      @override
      Widget buildWithChild(BuildContext context, Widget? child) {
        ///这是最为核心的代码
