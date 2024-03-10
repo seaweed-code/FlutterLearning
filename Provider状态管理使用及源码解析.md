@@ -57,7 +57,7 @@ version: 6.1.2
    /// ```dart
    /// Selector<Foo, ({String item1, String item2})>(
    ///   selector: (_, foo) => (item1: foo.item1, item2: foo.item2),///监听item1和item2
-   ///   builder: (_, data, __) {
+   ///   builder: (_, data, __) {///只有item1或者item2发生变化，才会触发rebuild
    ///     return Text('${data.item1}  ${data.item2}');
    ///   },
    /// );
