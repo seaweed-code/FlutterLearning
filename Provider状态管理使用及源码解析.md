@@ -86,7 +86,7 @@ version: 6.1.2
              key: key,
              children: providers,
              child: builder != null
-                 ? Builder(
+                 ? Builder(///这里说明,builder和child参数都是可选的，优先使用builder，没有就使用child
                      builder: (context) => builder(context, child),
                    )
                  : child,
