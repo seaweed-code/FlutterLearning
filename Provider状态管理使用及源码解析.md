@@ -160,6 +160,10 @@ version: 6.1.2
 
 4. ### Provider
 
+   父类：InheritedProvider
+
+   没有核心内容，基本上就是对父类的简单封装
+
    该组件携带一个数据模型，共享给下面的所有child widget 访问(read)，但不能监听(watch)。你可能要问，那有何用？为何不直接使用全局变量？好处在于当Provider在树中被移除，数据模型也会被释放。
 
    由此可知：
@@ -175,6 +179,81 @@ version: 6.1.2
    1、 Provider的功能  
 
    2、 可依赖上面其他模型（依赖于上面一个或多个Parrent Provider的数据。当其上面依赖的数据发送变化，自己携带的数据也会自动更新）。
+
+   ```dart
+   // {@template provider.proxyprovider}
+   /// A provider that builds a value based on other providers.
+   ///
+   /// The exposed value is built through either `create` or `update`, then passed
+   /// to [InheritedProvider].
+   ///
+   /// As opposed to `create`, `update` may be called more than once.
+   /// It will be called once the first time the value is obtained, then once
+   /// whenever [ProxyProvider] rebuilds or when one of the providers it depends on
+   /// updates.
+   ///
+   /// [ProxyProvider] comes in different variants such as [ProxyProvider2]. This
+   /// is syntax sugar on the top of [ProxyProvider0].
+   ///
+   /// As such, `ProxyProvider<A, Result>` is equal to:
+   /// ```dart
+   /// ProxyProvider0<Result>(
+   ///   update: (context, result) {
+   ///     final a = Provider.of<A>(context);
+   ///     return update(context, a, result);
+   ///   }
+   /// );
+   /// ```
+   ///
+   /// Whereas `ProxyProvider2<A, B, Result>` is equal to:
+   /// ```dart
+   /// ProxyProvider0<Result>(
+   ///   update: (context, result) {
+   ///     final a = Provider.of<A>(context);
+   ///     final b = Provider.of<B>(context);
+   ///     return update(context, a, b, result);
+   ///   }
+   /// );
+   /// ```
+   ///
+   /// This last parameter of `update` is the last value returned by either
+   /// `create` or `update`.
+   /// It is `null` by default.
+   ///
+   /// `update` must not be `null`.
+   ///
+   /// See also:
+   ///
+   ///  * [Provider], which matches the behavior of [ProxyProvider] but has only
+   ///     a `create` callback.
+   /// {@endtemplate}
+   class ProxyProvider<T, R> extends ProxyProvider0<R> {
+     /// Initializes [key] for subclasses.
+     ProxyProvider({
+       Key? key,
+       Create<R>? create,
+       required ProxyProviderBuilder<T, R> update,
+       UpdateShouldNotify<R>? updateShouldNotify,
+       Dispose<R>? dispose,
+       bool? lazy,
+       TransitionBuilder? builder,
+       Widget? child,
+     }) : super(
+             key: key,
+             lazy: lazy,
+             builder: builder,
+             create: create,
+             update: (context, value) => update(
+               context,
+               Provider.of(context),///监听T的变化
+               value,
+             ),
+             updateShouldNotify: updateShouldNotify,
+             dispose: dispose,
+             child: child,
+           );
+   }
+   ```
 
    
 
