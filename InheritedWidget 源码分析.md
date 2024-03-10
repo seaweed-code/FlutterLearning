@@ -138,6 +138,7 @@ class InheritedElement extends ProxyElement {
       ///1、确保每个dependent都是自己的child
       ///2、确保dependent的监听列表中确实有自己
       ///3、逐个调用每个监听者的didChangeDependencies 方法
+      ///4、_dependents是一个字典，key表示监听者widget，value表示其对哪些方面的改变感兴趣，然而此处没有使用value，InheritedModel或者Provider等框架就充分利用了该字典，可更细粒度的监听感兴趣的方面
       notifyDependent(oldWidget, dependent);
     }
   }
