@@ -77,11 +77,8 @@ version: 6.1.2
      })  : _shouldRebuild = shouldRebuild,
            super(key: key, child: child);
    
-    
      final ValueWidgetBuilder<T> builder;
-   
      final T Function(BuildContext) selector;
-   
      final ShouldRebuild<T>? _shouldRebuild;
    
      @override
