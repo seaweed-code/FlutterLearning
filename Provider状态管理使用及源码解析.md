@@ -140,13 +140,10 @@ version: 6.1.2
    
      @override
      Widget buildWithChild(BuildContext context, Widget? child) {
-       assert(
-         builder != null || child != null,
-         '$runtimeType used outside of MultiProvider must specify a child',
-       );
-       return _InheritedProviderScope<T?>(
+       ///这是最为核心的代码
+       //当函数重新调用时，_InheritedProviderScope（InheritedWidget的子类）会重新创建，但是child参数不会。根据继承式组件原理，一旦InheritedWidget重写创建，所以依赖者depedents都会被标记为重建，从而更新所有依赖者
+       return _InheritedProviderScope<T?>(///InheritedWidget子类，这是数据能共享的本质
          owner: this,
-         // ignore: no_runtimetype_tostring
          debugType: kDebugMode ? '$runtimeType' : '',
          child: builder != null
              ? Builder(
