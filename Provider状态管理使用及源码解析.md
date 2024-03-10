@@ -24,23 +24,11 @@ version: 6.1.2
 
    起作用与ChangeNotifierProvider一样，只不过他可以监听更为原始的Listenable类型的模型
 
+   **QA**：下面两个构造函数：传create，和传value又何区别呢？
+
    ```dart
-   /// Listens to a [Listenable], expose it to its descendants and rebuilds
-   /// dependents whenever the listener emits an event.
-   ///
-   /// For usage information, see [ChangeNotifierProvider], a subclass of
-   /// [ListenableProvider] made for [ChangeNotifier].
-   ///
-   /// You will generally want to use [ChangeNotifierProvider] instead.
-   /// But [ListenableProvider] is available in case you want to implement
-   /// [Listenable] yourself, or use [Animation].
+   ///作为父类，可以监听更为原始的Listenable类型数据变化
    class ListenableProvider<T extends Listenable?> extends InheritedProvider<T> {
-     /// Creates a [Listenable] using [create] and subscribes to it.
-     ///
-     /// [dispose] can optionally passed to free resources
-     /// when [ListenableProvider] is removed from the tree.
-     ///
-     /// [create] must not be `null`.
      ListenableProvider({
        Key? key,
        required Create<T> create,
