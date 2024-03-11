@@ -117,10 +117,10 @@ Widget build(BuildContext context) {
       super.physics,
       super.shrinkWrap,
       super.padding,
-      required NullableIndexedWidgetBuilder itemBuilder,
+      required NullableIndexedWidgetBuilder itemBuilder,///每行的widget的构造方法
       ChildIndexGetter? findChildIndexCallback,
-      required IndexedWidgetBuilder separatorBuilder,
-      required int itemCount,
+      required IndexedWidgetBuilder separatorBuilder,///分割线的构造方法
+      required int itemCount,///总共多少行
       bool addAutomaticKeepAlives = true,
       bool addRepaintBoundaries = true,
       bool addSemanticIndexes = true,
