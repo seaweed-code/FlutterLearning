@@ -261,3 +261,5 @@ Widget build(BuildContext context) {
   
 
 ### CustomScrollView的使用
+
+ListView只能做列表，GridView只能做网格类型，而CustomScrollView可以将他们混合起来一起滚动，作出非常棒的效果。
