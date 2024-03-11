@@ -42,19 +42,19 @@ Widget build(BuildContext context) {
    ///默认构造函数使用SliverChildListDelegate，一次性生成所有child，不按需加载
     ListView({
       super.key,
-      super.scrollDirection,
-      super.reverse,
-      super.controller,
-      super.primary,
-      super.physics,
-      super.shrinkWrap,
-      super.padding,
-      this.itemExtent,
-      this.prototypeItem,
-      bool addAutomaticKeepAlives = true,
-      bool addRepaintBoundaries = true,
-      bool addSemanticIndexes = true,
-      super.cacheExtent,
+      super.scrollDirection,///滚动方向，水平、垂直
+      super.reverse,///决定滚动方向是否与阅读方向一致
+      super.controller,///控制滚动的位置
+      super.primary,///当内容不足以滚动时，是否支持滚动；对于iOS系统还有一个效果：当用户点击状态栏时是否滑动到顶部。
+      super.physics,///设置滚动时的回弹效果
+      super.shrinkWrap,//scroll view在滑动方向上的高度是否由内容高度决定，false：则高度为滑动方向上的最大允许高度；如果在滑动方向上没有设置约束，则这个字段必须设置为true，否则会报错
+      super.padding,///用来设置BoxScrollView中子控件与父控件的间距
+      this.itemExtent,///给Item在设置固定高度，用来提高滑动性能
+      this.prototypeItem,///给Item在设置固定高度时，高度值通过该原型动态计算出来，用来提高滑动性能
+      bool addAutomaticKeepAlives = true,///是否将子控件包裹在AutomaticKeepAlive控件内
+      bool addRepaintBoundaries = true,///是否将子控件包裹在 RepaintBoundary 控件内。用于避免列表滚动时的重绘，如果子控件重绘开销很小时，比如子控件就是个色块或简短的文字，把这个字段设置为false性能会更好
+      bool addSemanticIndexes = true,///是否把子控件包装在IndexedSemantics里，用来提供无障碍语义
+      super.cacheExtent,///可见区域的前后会有一定高度的空间去缓存子控件，
       List<Widget> children = const <Widget>[],
       int? semanticChildCount,
       super.dragStartBehavior,
