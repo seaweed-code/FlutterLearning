@@ -23,7 +23,7 @@ Widget build(BuildContext context) {
       return CustomScrollView(
         slivers: [
           SliverList(
-              delegate: SliverChildListDelegate(
+              delegate: SliverChildListDelegate(///SliverChildListDelegate是一次性全部创建，而不是按需加载
             [for (int i = 0; i < 100; i++) Text("Line----$i")],
           ))
         ],
