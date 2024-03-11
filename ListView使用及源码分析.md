@@ -107,7 +107,7 @@ Widget build(BuildContext context) {
            semanticChildCount: semanticChildCount ?? itemCount,
          );
   
-    ///内部自动帮我们加上分割线，如果我们有n行的话，加上分割线总高就是：2*n -1 行，其中偶数行是我们自己的，奇数行是分割线
+    ///内部自动帮我们加上分割线，如果我们有n行的话，内部加上分割线就是：2*n -1 行，其中偶数行是我们自己的，奇数行是分割线
     ListView.separated({
       super.key,
       super.scrollDirection,
@@ -134,18 +134,18 @@ Widget build(BuildContext context) {
          childrenDelegate = SliverChildBuilderDelegate(///跟Builder方法一样，只不过内部帮我们手动加上分割线
            (BuildContext context, int index) {
              final int itemIndex = index ~/ 2;
-             if (index.isEven) {
+             if (index.isEven) {///偶数行是我们的widget
                return itemBuilder(context, itemIndex);
              }
-             return separatorBuilder(context, itemIndex);
+             return separatorBuilder(context, itemIndex);//奇数行，偷偷帮我们加上分割线
            },
            findChildIndexCallback: findChildIndexCallback,
-           childCount: _computeActualChildCount(itemCount),
+           childCount: _computeActualChildCount(itemCount),///外部行转内部行数：2*itemCount - 1
            addAutomaticKeepAlives: addAutomaticKeepAlives,
            addRepaintBoundaries: addRepaintBoundaries,
            addSemanticIndexes: addSemanticIndexes,
-           semanticIndexCallback: (Widget widget, int index) {
-             return index.isEven ? index ~/ 2 : null;
+           semanticIndexCallback: (Widget widget, int index) {///偷梁换柱
+             return index.isEven ? index ~/ 2 : null;///把内部的行数 转换成 外部行数
            },
          ),
          super(
