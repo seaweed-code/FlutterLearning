@@ -61,7 +61,7 @@ Widget build(BuildContext context) {
       super.keyboardDismissBehavior,
       super.restorationId,
       super.clipBehavior,
-    }) : childrenDelegate = SliverChildListDelegate(///使用SliverChildListDelegate
+    }) : childrenDelegate = SliverChildListDelegate(///使用SliverChildListDelegate一次性创建所有child
            children,
            addAutomaticKeepAlives: addAutomaticKeepAlives,
            addRepaintBoundaries: addRepaintBoundaries,
@@ -95,7 +95,7 @@ Widget build(BuildContext context) {
       super.keyboardDismissBehavior,
       super.restorationId,
       super.clipBehavior,
-    }) : childrenDelegate = SliverChildBuilderDelegate(///使用SliverChildBuilderDelegate
+    }) : childrenDelegate = SliverChildBuilderDelegate(///使用SliverChildBuilderDelegate，按需创建widget
            itemBuilder,
            findChildIndexCallback: findChildIndexCallback,
            childCount: itemCount,
