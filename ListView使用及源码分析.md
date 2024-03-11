@@ -39,7 +39,7 @@ Widget build(BuildContext context) {
   ```dart
   class ListView extends BoxScrollView {
     
-   ///默认构造函数使用SliverChildListDelegate
+   ///默认构造函数使用SliverChildListDelegate，一次性生成所有child，不按需加载
     ListView({
       super.key,
       super.scrollDirection,
@@ -71,7 +71,7 @@ Widget build(BuildContext context) {
            semanticChildCount: semanticChildCount ?? children.length,
          );
   
-   ///Builder构造函数使用SliverChildBuilderDelegate
+   ///Builder构造函数使用SliverChildBuilderDelegate，按需加载
     ListView.builder({
       super.key,
       super.scrollDirection,
@@ -140,7 +140,7 @@ Widget build(BuildContext context) {
              return separatorBuilder(context, itemIndex);//奇数行，偷偷帮我们加上分割线
            },
            findChildIndexCallback: findChildIndexCallback,
-           childCount: _computeActualChildCount(itemCount),///外部行转内部行数：2*itemCount - 1
+           childCount: _computeActualChildCount(itemCount),///外部行转内部实际行数：2*itemCount - 1
            addAutomaticKeepAlives: addAutomaticKeepAlives,
            addRepaintBoundaries: addRepaintBoundaries,
            addSemanticIndexes: addSemanticIndexes,
@@ -171,70 +171,36 @@ Widget build(BuildContext context) {
       super.keyboardDismissBehavior,
       super.restorationId,
       super.clipBehavior,
-    }) : assert(
-           itemExtent == null || prototypeItem == null,
-           'You can only pass itemExtent or prototypeItem, not both',
-         );
-  
-    /// {@template flutter.widgets.list_view.itemExtent}
-    /// If non-null, forces the children to have the given extent in the scroll
-    /// direction.
-    ///
-    /// Specifying an [itemExtent] is more efficient than letting the children
-    /// determine their own extent because the scrolling machinery can make use of
-    /// the foreknowledge of the children's extent to save work, for example when
-    /// the scroll position changes drastically.
-    ///
-    /// See also:
-    ///
-    ///  * [SliverFixedExtentList], the sliver used internally when this property
-    ///    is provided. It constrains its box children to have a specific given
-    ///    extent along the main axis.
-    ///  * The [prototypeItem] property, which allows forcing the children's
-    ///    extent to be the same as the given widget.
-    /// {@endtemplate}
+    }) : 
+    
+    ///当行高固定时，设置该字段会大大提高滚动效率
+    ////设置了这个属性，内部会使用SliverFixedExtentList，固定每个Cell的高度，
     final double? itemExtent;
   
-    /// {@template flutter.widgets.list_view.prototypeItem}
-    /// If non-null, forces the children to have the same extent as the given
-    /// widget in the scroll direction.
-    ///
-    /// Specifying an [prototypeItem] is more efficient than letting the children
-    /// determine their own extent because the scrolling machinery can make use of
-    /// the foreknowledge of the children's extent to save work, for example when
-    /// the scroll position changes drastically.
-    ///
-    /// See also:
-    ///
-    ///  * [SliverPrototypeExtentList], the sliver used internally when this
-    ///    property is provided. It constrains its box children to have the same
-    ///    extent as a prototype item along the main axis.
-    ///  * The [itemExtent] property, which allows forcing the children's extent
-    ///    to a given value.
-    /// {@endtemplate}
+    ///当行高固定时，但需要动态计算时，设置该字段会大大提高滚动效率
+    ////设置了这个属性，内部会使用SliverPrototypeExtentList，固定每个Cell的高度，
     final Widget? prototypeItem;
   
-    /// A delegate that provides the children for the [ListView].
-    ///
-    /// The [ListView.custom] constructor lets you specify this delegate
-    /// explicitly. The [ListView] and [ListView.builder] constructors create a
-    /// [childrenDelegate] that wraps the given [List] and [IndexedWidgetBuilder],
-    /// respectively.
+    ///如果使用默认构造函数，这个字段会被自动设置为：SliverChildListDelegate
+    ///如果使用build构造函数，这个字段会自动设置为：SliverChildBuilderDelegate
+    //如果使用custom构造方法，可以自定义该字段
     final SliverChildDelegate childrenDelegate;
   
     @override
     Widget buildChildLayout(BuildContext context) {
-      if (itemExtent != null) {
+      if (itemExtent != null) {///如果ListView中设置了itemExtent固定行高，则这里就是SliverFixedExtentList
         return SliverFixedExtentList(
           delegate: childrenDelegate,
           itemExtent: itemExtent!,
         );
+        ///否则如果ListView中设置了prototypeItem原型，则这里就是SliverPrototypeExtentList
       } else if (prototypeItem != null) {
         return SliverPrototypeExtentList(
           delegate: childrenDelegate,
           prototypeItem: prototypeItem!,
         );
       }
+      ///如果上述两个字段都没有设置，则使用SliverList
       return SliverList(delegate: childrenDelegate);
     }
   }
