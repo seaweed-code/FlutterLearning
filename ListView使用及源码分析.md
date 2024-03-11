@@ -22,7 +22,7 @@ Widget build(BuildContext context) {
 - ### 使用ListView.builder构建
 
   ```dart
-  ////注意:当Cell的高度不一致时，滚动时会有性能问题 
+  ////注意:当Cell的高度不一致时，大幅滚动时会有性能问题 ，因为Flutter不得不计算出所有的Cell高度，然后加起来
   Widget build(BuildContext context) {
       return ListView.builder(///控件滚到屏幕外后会被重复利用，不会一次性全部创建
        // cacheExtent: 100, 超出屏幕部分缓存多少像素？上下各100像素，一般不需要设置
@@ -45,6 +45,8 @@ Widget build(BuildContext context) {
     }
   ```
 
+- ### 使用ListView.custom构建
+
   
 
-- ### 443
+- ff
