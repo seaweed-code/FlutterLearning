@@ -22,14 +22,29 @@ Widget build(BuildContext context) {
 - ### 使用ListView.builder构建
 
   ```dart
-    Widget build(BuildContext context) {
+  ////注意:当Cell的高度不一致时，滚动时会有性能问题 
+  Widget build(BuildContext context) {
       return ListView.builder(///控件滚到屏幕外后会被重复利用，不会一次性全部创建
+       // cacheExtent: 100, 超出屏幕部分缓存多少像素？上下各100像素，一般不需要设置
         itemCount: 100,
         itemBuilder: (context, i) => Text("Line----$i"),
       );
     }
   ```
 
-- ### 分撒的
+- ### 使用ListView.separated构建
+
+  ```dart
+  Widget build(BuildContext context) {
+      return ListView.separated(
+        separatorBuilder: (context, index) => Divider(),//可以设置分割线
+        cacheExtent: 100,
+        itemCount: 100,
+        itemBuilder: (context, i) => Text("Line----$i"),
+      );
+    }
+  ```
+
+  
 
 - ### 443
