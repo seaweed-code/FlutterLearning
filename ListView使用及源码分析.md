@@ -22,7 +22,7 @@ Widget build(BuildContext context) {
    Widget build(BuildContext context) {
       return CustomScrollView(
         slivers: [
-          ///SliverFixedExtentList 固定高度，可以优化滚动性能
+          ///使用SliverFixedExtentList 固定高度，可以优化滚动性能
           ///使用SliverPrototypeExtentList，设置了prototypeItem原型来动态计算固定的高度，可以优化滚动性能
           SliverList(
               delegate: SliverChildListDelegate(///SliverChildListDelegate是一次性全部创建，而不是按需加载
