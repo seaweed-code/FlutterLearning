@@ -9,7 +9,7 @@ Widget build(BuildContext context) {
   }
 ```
 
-- ### 最简单使用方法
+- ### 最简单使用方法（一次性创建所有的child）
 
   ```dart
   ///注意：这种方法会一次性创建所有的children，一般不宜使用 
@@ -47,6 +47,12 @@ Widget build(BuildContext context) {
 
 - ### 使用ListView.custom构建
 
+  1、指定itemExtent参数可以固定每行的高度，优化滚动性能。类似于iOS中UITableView设置rowHeight属性而不是用delegate返回高度。
+
+  2、如果列表每行高度都相同但不知道具体是多少，这时候就没法使用itemExtent来优化了，可以使用prototypeItem原型返回一个widget，Flutter会动态计算其高度，然后所有行都使用此高度
+
+  3、如果列表每行高度都不同，且需要动态计算，这时候该怎么优化呢？典型的例子就是聊天界面！
+
   
 
-- ff
+### CustomScrollView的使用
