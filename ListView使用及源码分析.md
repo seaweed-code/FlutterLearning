@@ -162,8 +162,8 @@ Widget build(BuildContext context) {
       super.physics,
       super.shrinkWrap,
       super.padding,
-      this.itemExtent,
-      this.prototypeItem,
+      this.itemExtent,///设置了这个属性，内部会使用SliverFixedExtentList，固定每个Cell的高度，
+      this.prototypeItem,//设置了这个属性，内部会使用SliverPrototypeExtentList，固定每个Cell的高度
       required this.childrenDelegate,
       super.cacheExtent,
       super.semanticChildCount,
