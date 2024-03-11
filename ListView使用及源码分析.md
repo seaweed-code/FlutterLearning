@@ -42,7 +42,21 @@ Widget build(BuildContext context) {
         itemBuilder: (context, i) => Text("Line----$i"),
       );
     }
-  ///其底层相当于在CustomScollView中使用了SliverList
+  ///上述方法相当于
+  Widget build(BuildContext context) {
+      return CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Text("Line----$index");
+              },
+              childCount: 100,
+            ),
+          )
+        ],
+      );
+    }
   ```
 
 - ### 使用ListView.separated构建
