@@ -17,6 +17,18 @@ Widget build(BuildContext context) {
       return ListView(///直接改为ListView即可
           children: [for (int i = 0; i < 100; i++) Text("Line----$i")]);
     }
+  
+  ///上述方法相当于如下代码：
+   Widget build(BuildContext context) {
+      return CustomScrollView(
+        slivers: [
+          SliverList(
+              delegate: SliverChildListDelegate(
+            [for (int i = 0; i < 100; i++) Text("Line----$i")],
+          ))
+        ],
+      );
+    }
   ```
 
 - ### 使用ListView.builder构建
@@ -30,6 +42,7 @@ Widget build(BuildContext context) {
         itemBuilder: (context, i) => Text("Line----$i"),
       );
     }
+  ///其底层相当于在CustomScollView中使用了SliverList
   ```
 
 - ### 使用ListView.separated构建
