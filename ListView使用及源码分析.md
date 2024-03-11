@@ -19,7 +19,16 @@ Widget build(BuildContext context) {
     }
   ```
 
-- ### 发达
+- ### 使用ListView.builder构建
+
+  ```dart
+    Widget build(BuildContext context) {
+      return ListView.builder(///控件滚到屏幕外后会被重复利用，不会一次性全部创建
+        itemCount: 100,
+        itemBuilder: (context, i) => Text("Line----$i"),
+      );
+    }
+  ```
 
 - ### 分撒的
 
