@@ -110,7 +110,7 @@ Widget build(BuildContext context) {
     ///内部自动帮我们加上分割线，如果我们有n行的话，内部加上分割线就是：2*n -1 行，其中偶数行是我们自己的，奇数行是分割线
     ListView.separated({
       super.key,
-      super.scrollDirection,
+      super.scrollDirection,///水平滚动，还是垂直滚动
       super.reverse,
       super.controller,
       super.primary,
