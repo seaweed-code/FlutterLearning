@@ -31,7 +31,218 @@ Widget build(BuildContext context) {
         ],
       );
     }
+  
   ```
+
+  参考ListView源码：
+
+  ```dart
+  class ListView extends BoxScrollView {
+    
+   ///默认构造函数使用SliverChildListDelegate
+    ListView({
+      super.key,
+      super.scrollDirection,
+      super.reverse,
+      super.controller,
+      super.primary,
+      super.physics,
+      super.shrinkWrap,
+      super.padding,
+      this.itemExtent,
+      this.prototypeItem,
+      bool addAutomaticKeepAlives = true,
+      bool addRepaintBoundaries = true,
+      bool addSemanticIndexes = true,
+      super.cacheExtent,
+      List<Widget> children = const <Widget>[],
+      int? semanticChildCount,
+      super.dragStartBehavior,
+      super.keyboardDismissBehavior,
+      super.restorationId,
+      super.clipBehavior,
+    }) : childrenDelegate = SliverChildListDelegate(///使用SliverChildListDelegate
+           children,
+           addAutomaticKeepAlives: addAutomaticKeepAlives,
+           addRepaintBoundaries: addRepaintBoundaries,
+           addSemanticIndexes: addSemanticIndexes,
+         ),
+         super(
+           semanticChildCount: semanticChildCount ?? children.length,
+         );
+  
+   ///Builder构造函数使用SliverChildBuilderDelegate
+    ListView.builder({
+      super.key,
+      super.scrollDirection,
+      super.reverse,
+      super.controller,
+      super.primary,
+      super.physics,
+      super.shrinkWrap,
+      super.padding,
+      this.itemExtent,
+      this.prototypeItem,
+      required NullableIndexedWidgetBuilder itemBuilder,
+      ChildIndexGetter? findChildIndexCallback,
+      int? itemCount,
+      bool addAutomaticKeepAlives = true,
+      bool addRepaintBoundaries = true,
+      bool addSemanticIndexes = true,
+      super.cacheExtent,
+      int? semanticChildCount,
+      super.dragStartBehavior,
+      super.keyboardDismissBehavior,
+      super.restorationId,
+      super.clipBehavior,
+    }) : childrenDelegate = SliverChildBuilderDelegate(///使用SliverChildBuilderDelegate
+           itemBuilder,
+           findChildIndexCallback: findChildIndexCallback,
+           childCount: itemCount,
+           addAutomaticKeepAlives: addAutomaticKeepAlives,
+           addRepaintBoundaries: addRepaintBoundaries,
+           addSemanticIndexes: addSemanticIndexes,
+         ),
+         super(
+           semanticChildCount: semanticChildCount ?? itemCount,
+         );
+  
+    ///内部自动帮我们加上分割线，如果我们有n行的话，加上分割线总高就是：2*n -1 行，其中偶数行是我们自己的行，奇数行是分割线
+    ListView.separated({
+      super.key,
+      super.scrollDirection,
+      super.reverse,
+      super.controller,
+      super.primary,
+      super.physics,
+      super.shrinkWrap,
+      super.padding,
+      required NullableIndexedWidgetBuilder itemBuilder,
+      ChildIndexGetter? findChildIndexCallback,
+      required IndexedWidgetBuilder separatorBuilder,
+      required int itemCount,
+      bool addAutomaticKeepAlives = true,
+      bool addRepaintBoundaries = true,
+      bool addSemanticIndexes = true,
+      super.cacheExtent,
+      super.dragStartBehavior,
+      super.keyboardDismissBehavior,
+      super.restorationId,
+      super.clipBehavior,
+    }) : assert(itemCount >= 0),
+         itemExtent = null,
+         prototypeItem = null,
+         childrenDelegate = SliverChildBuilderDelegate(///跟Builder方法一样，只不过内部帮我们手动加上分割线
+           (BuildContext context, int index) {
+             final int itemIndex = index ~/ 2;
+             if (index.isEven) {
+               return itemBuilder(context, itemIndex);
+             }
+             return separatorBuilder(context, itemIndex);
+           },
+           findChildIndexCallback: findChildIndexCallback,
+           childCount: _computeActualChildCount(itemCount),
+           addAutomaticKeepAlives: addAutomaticKeepAlives,
+           addRepaintBoundaries: addRepaintBoundaries,
+           addSemanticIndexes: addSemanticIndexes,
+           semanticIndexCallback: (Widget widget, int index) {
+             return index.isEven ? index ~/ 2 : null;
+           },
+         ),
+         super(
+           semanticChildCount: itemCount,
+         );
+  
+   
+    const ListView.custom({
+      super.key,
+      super.scrollDirection,
+      super.reverse,
+      super.controller,
+      super.primary,
+      super.physics,
+      super.shrinkWrap,
+      super.padding,
+      this.itemExtent,
+      this.prototypeItem,
+      required this.childrenDelegate,
+      super.cacheExtent,
+      super.semanticChildCount,
+      super.dragStartBehavior,
+      super.keyboardDismissBehavior,
+      super.restorationId,
+      super.clipBehavior,
+    }) : assert(
+           itemExtent == null || prototypeItem == null,
+           'You can only pass itemExtent or prototypeItem, not both',
+         );
+  
+    /// {@template flutter.widgets.list_view.itemExtent}
+    /// If non-null, forces the children to have the given extent in the scroll
+    /// direction.
+    ///
+    /// Specifying an [itemExtent] is more efficient than letting the children
+    /// determine their own extent because the scrolling machinery can make use of
+    /// the foreknowledge of the children's extent to save work, for example when
+    /// the scroll position changes drastically.
+    ///
+    /// See also:
+    ///
+    ///  * [SliverFixedExtentList], the sliver used internally when this property
+    ///    is provided. It constrains its box children to have a specific given
+    ///    extent along the main axis.
+    ///  * The [prototypeItem] property, which allows forcing the children's
+    ///    extent to be the same as the given widget.
+    /// {@endtemplate}
+    final double? itemExtent;
+  
+    /// {@template flutter.widgets.list_view.prototypeItem}
+    /// If non-null, forces the children to have the same extent as the given
+    /// widget in the scroll direction.
+    ///
+    /// Specifying an [prototypeItem] is more efficient than letting the children
+    /// determine their own extent because the scrolling machinery can make use of
+    /// the foreknowledge of the children's extent to save work, for example when
+    /// the scroll position changes drastically.
+    ///
+    /// See also:
+    ///
+    ///  * [SliverPrototypeExtentList], the sliver used internally when this
+    ///    property is provided. It constrains its box children to have the same
+    ///    extent as a prototype item along the main axis.
+    ///  * The [itemExtent] property, which allows forcing the children's extent
+    ///    to a given value.
+    /// {@endtemplate}
+    final Widget? prototypeItem;
+  
+    /// A delegate that provides the children for the [ListView].
+    ///
+    /// The [ListView.custom] constructor lets you specify this delegate
+    /// explicitly. The [ListView] and [ListView.builder] constructors create a
+    /// [childrenDelegate] that wraps the given [List] and [IndexedWidgetBuilder],
+    /// respectively.
+    final SliverChildDelegate childrenDelegate;
+  
+    @override
+    Widget buildChildLayout(BuildContext context) {
+      if (itemExtent != null) {
+        return SliverFixedExtentList(
+          delegate: childrenDelegate,
+          itemExtent: itemExtent!,
+        );
+      } else if (prototypeItem != null) {
+        return SliverPrototypeExtentList(
+          delegate: childrenDelegate,
+          prototypeItem: prototypeItem!,
+        );
+      }
+      return SliverList(delegate: childrenDelegate);
+    }
+  }
+  
+  ```
+
+  
 
 - ### 使用ListView.builder构建
 
