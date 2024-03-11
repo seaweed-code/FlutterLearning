@@ -9,10 +9,11 @@ Widget build(BuildContext context) {
   }
 ```
 
-- ### 最简单方法
+- ### 最简单使用方法
 
   ```dart
-   Widget build(BuildContext context) {
+  ///注意：这种方法会一次性创建所有的children，一般不宜使用 
+  Widget build(BuildContext context) {
       return ListView(///直接改为ListView即可
           children: [for (int i = 0; i < 100; i++) Text("Line----$i")]);
     }
