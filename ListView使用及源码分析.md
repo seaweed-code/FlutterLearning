@@ -51,7 +51,10 @@ Widget build(BuildContext context) {
       super.padding,///用来设置BoxScrollView中子控件与父控件的间距
       this.itemExtent,///给Item在设置固定高度，用来提高滑动性能
       this.prototypeItem,///给Item在设置固定高度时，高度值通过该原型动态计算出来，用来提高滑动性能
+      
+      ///默认为true，会自动使用AutomaticKeepAlive包裹每个子控件，child可以使用KeepAliveNotification通知来防止滑出屏幕后，状态丢失
       bool addAutomaticKeepAlives = true,///是否将子控件包裹在AutomaticKeepAlive控件内
+      
       bool addRepaintBoundaries = true,///是否将子控件包裹在 RepaintBoundary 控件内。用于避免列表滚动时的重绘，如果子控件重绘开销很小时，比如子控件就是个色块或简短的文字，把这个字段设置为false性能会更好
       bool addSemanticIndexes = true,///是否把子控件包装在IndexedSemantics里，用来提供无障碍语义
       super.cacheExtent,///可见区域的前后会有一定高度的空间去缓存子控件，
