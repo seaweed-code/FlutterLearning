@@ -33,8 +33,8 @@
   
   Stream<int> countDownByAsyncRecursive(int num) async* {
     if (num > 0) {
-      yield num;
-      yield* countDownByAsyncRecursive(num - 1);//yield*后跟一个递归函数
+      yield num;///yield 生成单个数字
+      yield* countDownByAsyncRecursive(num - 1);//yield* 生成一系列数字：Stream<int>
     }
   }
   ```
