@@ -65,6 +65,49 @@ Stream<int> timedCounter(Duration interval, [int? maxCount]) {
 
 #### 同步序列生成
 
+- 继承**Iterable**类
+
+  ```dart
+  class StringIterable extends Iterable<String> {
+    final List<String> stringList; //实际上List就是一个Iterable
+  
+    StringIterable(this.stringList);
+  
+    @override
+    Iterator<String> get iterator =>
+        stringList.iterator; //通过将List的iterator，赋值给iterator
+  
+  }
+  
+  //这样StringIterable就是一个特定类型String的迭代器，我们就可以使用for-in循环进行迭代
+  void main() {
+    var stringIterable = StringIterable([
+      "Dart",
+      "Java",
+      "Kotlin",
+      "Swift"
+    ]);
+    for (var value in stringIterable) {
+      print('$value');
+    }
+  }
+  
+  //甚至你还可以将StringIterable结合map、where、reduce之类操作符函数之类对迭代器值进行变换
+  void main() {
+    var stringIterable = StringIterable([
+      "Dart",
+      "Java",
+      "Kotlin",
+      "Swift"
+    ]);
+    stringIterable
+        .map((language) => language.length)//可以结合map一起使用，实际上本质就是Iterable对象转换，将StringIterable转换成MappedIterable
+        .forEach(print);
+  }
+  ```
+
+- 关键字yield 、sync*
+
 ```dart
 void main() {
   final numbers = getRange(1, 10);
