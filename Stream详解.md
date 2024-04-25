@@ -21,6 +21,24 @@
   }
   ```
 
+- yield* 关键字
+
+  ```dart
+  void main() {
+    final Stream<int> sequence = countDownByAsync(10);
+    print('start');
+    sequence.listen((event) => print(event)).onDone(() => print('is done'));
+    print('end');
+  }
+  
+  Stream<int> countDownByAsyncRecursive(int num) async* {
+    if (num > 0) {
+      yield num;
+      yield* countDownByAsyncRecursive(num - 1);//yield*后跟一个递归函数
+    }
+  }
+  ```
+
   特点：
 
   1. 异步
