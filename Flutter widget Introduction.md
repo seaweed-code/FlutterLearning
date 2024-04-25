@@ -228,7 +228,7 @@ child分为2种，flexible、固定尺寸的
 
   2、child的尺寸必须满足原始约束（不是unconstraint）
 
-  3、自身的尺寸为指定的size（当然是在满足parent给的约束条件下）。
+  3、自身的尺寸尽可能靠近指定的size（当然是在满足parent给的约束条件下）。
 
   ```dart
   const SizedOverflowBox({
