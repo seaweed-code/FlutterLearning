@@ -63,3 +63,21 @@ Stream<int> timedCounter(Duration interval, [int? maxCount]) {
 }
 ```
 
+#### 同步序列生成
+
+```dart
+void main() {
+  final numbers = getRange(1, 10);
+  for (var value in numbers) {
+    print('$value');
+  }
+}
+
+//用于生成一个同步序列
+Iterable<int> getRange(int start, int end) sync* { //sync*告诉Dart这个函数是一个按需生产值的同步生成器函数
+  for (int i = start; i <= end; i++) {
+    yield i;//yield关键字有点像return，但是它是单次返回值，并不会像return直接结束整个函数
+  }
+}
+```
+
