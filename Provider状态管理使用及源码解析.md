@@ -175,6 +175,29 @@ version: 6.1.2
 
    2、如果下面的控件读取（read）Provider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
 
+   3、持有的数据不能是: Listenable/Stream 的子类,否则DEBUG运行会报错,设置Provider.debugCheckInvalidValueType = null;可取消验证
+
+   ```dart
+   // As such, `ProxyProvider<A, Result>` is equal to:
+    ProxyProvider0<Result>(
+      update: (context, result) {
+       final a = Provider.of<A>(context);
+        return update(context, a, result);
+     }
+    );
+   
+   /// Whereas `ProxyProvider2<A, B, Result>` is equal to:
+    ProxyProvider0<Result>(
+      update: (context, result) {
+       final a = Provider.of<A>(context);///监听A的变化,A、B应该是Listenable
+        final b = Provider.of<B>(context);///监听B的变化
+       return update(context, a, b, result);
+     }
+    );
+   ```
+
+   
+
 5. ### ProxyProvider
 
    该组件功能包括 ：
