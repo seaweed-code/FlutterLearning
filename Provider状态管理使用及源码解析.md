@@ -178,22 +178,60 @@ version: 6.1.2
    3、持有的数据不能是: Listenable/Stream 的子类,否则DEBUG运行会报错,设置Provider.debugCheckInvalidValueType = null;可取消验证
 
    ```dart
-   // As such, `ProxyProvider<A, Result>` is equal to:
-    ProxyProvider0<Result>(
-      update: (context, result) {
-       final a = Provider.of<A>(context);
-        return update(context, a, result);
-     }
-    );
+   ///1、只向下共享数据,但是数据变化不会更新 【因为根本就没有监听数据的变化】
+   ///T 类型,不能是Lisenable\Stream等可监听类型,如果需要监听数据变化,使用ChangeNotifierProvider
+   class Provider<T> extends InheritedProvider<T> {
+     Provider({
+       Key? key,
+       required Create<T> create,
+       Dispose<T>? dispose,
+       bool? lazy,
+       TransitionBuilder? builder,
+       Widget? child,
+     }) : super(
+             key: key,
+             lazy: lazy,
+             builder: builder,
+             create: create,
+             dispose: dispose,
+             debugCheckInvalidValueType: kReleaseMode
+                 ? null
+                 : (T value) =>
+                     Provider.debugCheckInvalidValueType?.call<T>(value),
+             child: child,
+           );
    
-   /// Whereas `ProxyProvider2<A, B, Result>` is equal to:
-    ProxyProvider0<Result>(
-      update: (context, result) {
-       final a = Provider.of<A>(context);///监听A的变化,A、B应该是Listenable
-        final b = Provider.of<B>(context);///监听B的变化
-       return update(context, a, b, result);
+   
+     Provider.value({
+       Key? key,
+       required T value,
+       UpdateShouldNotify<T>? updateShouldNotify,
+       TransitionBuilder? builder,
+       Widget? child,
+     })  : assert(() {
+       ///默认情况下,DEBUG模式,会检查value的类型是否是Listenabel,Stream,是则抛出异常
+             Provider.debugCheckInvalidValueType?.call<T>(value);
+             return true;
+           }()),
+           super.value(
+             key: key,
+             builder: builder,
+             value: value,
+             updateShouldNotify: updateShouldNotify,
+             child: child,
+           );
+   
+    
+     ////listen为true则添加依赖,否则则读取数据
+     static T of<T>(BuildContext context, {bool listen = true}) {
+       final inheritedElement = _inheritedElementOf<T>(context);
+       if (listen) {///添加依赖,一旦继承式组件rebuild,contex会自动更新
+         context.dependOnInheritedWidgetOfExactType<_InheritedProviderScope<T?>>();
+       }
+       final value = inheritedElement?.value;
+       return value as T;
      }
-    );
+   }
    ```
 
    
