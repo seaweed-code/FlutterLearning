@@ -244,7 +244,7 @@ version: 6.1.2
 
    2、 可依赖上面其他模型（依赖于上面一个或多个Parrent Provider的数据。当其上面依赖的数据发送变化，自己携带的数据也会自动更新）。
 
-   3、依赖的数据应该是Listenable类型,否则无法监听数据变化
+   3、依赖的数据应该继承Listenable、ChangeNotifier类型,否则无法监听数据变化
 
    ```dart
    // {@template provider.proxyprovider}
