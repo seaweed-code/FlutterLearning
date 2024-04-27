@@ -76,7 +76,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 - 缺乏可依赖的参数化功能，而riverpod支持，代码如下：
 
   ```dart
-  ///使用该Provider需要传递一个参数id，可增加任意数量、类型的参数
+  ///使用该Provider需要额外传递一个参数id，可增加任意数量、类型的参数
   final messagesFamily = FutureProvider.family<Message, String>((ref, id) async {
     return dio.get('http://my_api.dev/messages/$id');
   });
