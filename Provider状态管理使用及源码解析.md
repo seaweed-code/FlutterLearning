@@ -14,11 +14,11 @@ version: 6.1.2
 
    由此可知：
 
-   1、如果下面的控件监听（watch）ChangeNotifierProvider携带的数据变化，数据改变后会通知所有监听者
+   1、携带的数据，必须继承ChangeNotifier，且需要手动调用notifyListeners方法来通知Provider更新，从而更新所有依赖
 
-   2、如果下面的控件读取（read）ChangeNotifierProvider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
+   2、若一个child widget监听了（watch）ChangeNotifierProvider携带的数据变化，则数据改变后该widget会rebuild
 
-   3、数据模型必须继承ChangeNotifier，且需要手动调用notifyListeners方法才能rebuild all dependents
+   3、若一个child widget读取了（read）ChangeNotifierProvider携带的数据，获取的是当时的数据,且数据改变后不会通知该widget
 
 2. ### ListenableProvider
 
