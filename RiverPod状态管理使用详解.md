@@ -33,8 +33,6 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   }
   ```
 
-  
-
 - 不安全，当重构代码，或大型项目时，容易抛出ProviderNotFoundException的异常（事实上这就是起初开发RiverPod的主要原因之一）
 
 - Provider无法做到没有监听者时，自动移除其所持有的状态。其状态一直持有，不管是否有监听者，直到其在组件树中被移除。
