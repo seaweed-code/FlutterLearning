@@ -73,6 +73,25 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   }
   ```
 
+- 缺乏可依赖的参数化功能，而riverpod支持，代码如下：
+
+  ```dart
+  ///使用该Provider需要传递一个参数id，可增加任意数量、类型的参数
+  final messagesFamily = FutureProvider.family<Message, String>((ref, id) async {
+    return dio.get('http://my_api.dev/messages/$id');
+  });
+  
+  ///由于我们的messagesFamilyProvider使用时必须多传递一个参数id，因而下面的代码将会失效了
+    Widget build(BuildContext context, WidgetRef ref) {
+    final response = ref.watch(messagesFamily);// Error – messagesFamily is not a provider
+  }
+  
+  ///我们应该这样使用：
+  Widget build(BuildContext context, WidgetRef ref) {
+    final response = ref.watch(messagesFamily('id'));///传递一个字符串id='id'过去才行
+  }
+  ```
+
 ### Riverpod使用介绍
 
 1. 
