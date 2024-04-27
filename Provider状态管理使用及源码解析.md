@@ -179,6 +179,10 @@ version: 6.1.2
 
    4、持有的数据不能是: Listenable/Stream 的子类,否则DEBUG运行会报错,设置Provider.debugCheckInvalidValueType = null;可取消验证
 
+   **QA：问题来了，既然Provider没有监听数据变化，那么一个child Widget调用watch方法监听有何意义呢？**
+
+   答：当Provider自己rebuild的时候，其依赖者依然会被更新。例如，Provider A depend on另一个Provider B
+
    ```dart
    ///1、只向下共享数据,但数据模型无法主动触发Provider更新 【因为Provider根本就没有监听数据的变化】
    ///T 类型,不能是Lisenable\Stream等可监听类型,如果需要监听数据变化,使用ChangeNotifierProvider
