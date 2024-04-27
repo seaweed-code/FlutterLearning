@@ -171,7 +171,7 @@ version: 6.1.2
 
    由此可知：
 
-   1、与ChangeNotifierProvider的不同是，携带的数据不需要继承Listenable。因而数据变化无法触发Provider更新（Provider并不监听数据的变化）。
+   1、与ChangeNotifierProvider的不同是，携带的数据不需要继承Listenable。因而数据无法通过调用notifyListeners方法触发Provider更新（Provider并不监听数据的变化）。
 
    2、若一个child widget监听（watch）Provider携带的数据变化，是不会得到通知的。因为Provider自己也感知不到数据变化，它只是简单的持有数据。
 
