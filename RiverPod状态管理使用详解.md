@@ -2,7 +2,7 @@
 
 Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Provider字母顺序打乱组成“RiverPod”，这是一个带**有缓存**、且响应式的状态管理组件。可以帮你实现带有缓存的网络请求，并在需要的时候重新请求。
 
-### Provider框架的问题
+### Provider组件的局限性
 
 - 必须依赖BuildContext来获取组件树上面的Provider中携带的信息
 
@@ -72,8 +72,6 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
     }
   }
   ```
-
-- 房
 
 ### Riverpod使用介绍
 
