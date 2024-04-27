@@ -12,7 +12,23 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 - Provider之间依赖关系不好管理
 
-- 多个页面共享Provider，容易出现BUG。例如，页面A中有一个Provider，从A页面进入B中，B可正常访问其共享数据，但如果B页面显示时，A页面被释放了，则会出现BUG。
+  ```dart
+  @riverpod
+  int number(NumberRef ref) {
+    return Random().nextInt(10);
+  }
+  
+  @riverpod
+  int doubled(DoubledRef ref) {
+    final number = ref.watch(numberProvider);///依赖上面的Provider
+    .... ///如果需要，可以依赖任意个，而Provider则需要使用一些变体类Select0,Select1等来实现
+    return number * 2;
+  }
+  ```
+
+  
+
+- 多个页面共享Provider，容易出现BUG。例如，页面A中有一个Provider，从A页面进入B中，B可正常访问其共享数据，但如果B页面显示而A页面被释放了，则会出现BUG。
 
   **而使用riverpod则不会出现此问题，参考代码：**
 
