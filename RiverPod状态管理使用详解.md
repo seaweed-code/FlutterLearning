@@ -1,6 +1,6 @@
 ## RiverPod状态管理使用详解
 
-Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Provider字母顺序打乱组成“RiverPod”，这是一个带**有缓存**、且响应式的框架。可以帮你实现带有缓存的网络请求，并在需要的时候重新请求。
+Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Provider字母顺序打乱组成“RiverPod”，这是一个带**有缓存**、且响应式的状态管理组件。可以帮你实现带有缓存的网络请求，并在需要的时候重新请求。
 
 ### Provider框架的问题
 
@@ -21,12 +21,10 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   @riverpod
   int doubled(DoubledRef ref) {
     final number = ref.watch(numberProvider);///依赖上面的Provider
-    .... ///如果需要，可以依赖任意个，而Provider则需要使用一些变体类Select0,Select1等来实现
+    .... ///如果需要，可以依赖任意个，而Provider则需要使用一些变体类例如Select0,Select1等来实现
     return number * 2;
   }
   ```
-
-  
 
 - 多个页面共享Provider，容易出现BUG。例如，页面A中有一个Provider，从A页面进入B中，B可正常访问其共享数据，但如果B页面显示而A页面被释放了，则会出现BUG。
 
