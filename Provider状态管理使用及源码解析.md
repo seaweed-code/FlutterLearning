@@ -14,7 +14,7 @@ version: 6.1.2
 
    由此可知：
 
-   1、携带的数据，必须继承ChangeNotifier，且需要手动调用notifyListeners方法来通知Provider更新，从而更新所有依赖
+   1、携带的数据，必须继承ChangeNotifier，且数据中可以手动调用notifyListeners方法来通知Provider更新，从而间接更新所有依赖
 
    2、若一个child widget监听了（watch）ChangeNotifierProvider携带的数据变化，则数据改变后该widget会rebuild
 
@@ -167,18 +167,20 @@ version: 6.1.2
 
    没有核心内容，基本上就是对父类的简单封装
 
-   该组件携带一个数据模型，共享给下面的所有child widget 访问(read)，但不能监听(watch)。你可能要问，那有何用？为何不直接使用全局变量？好处在于当Provider在树中被移除，数据模型也会被释放。
+   该组件携带一个数据模型，共享给下面的所有child widget 访问(read)，监听(watch)。当Provider在树中被移除，数据模型也会被释放。
 
    由此可知：
 
-   1、如果下面的控件监听（watch）Provider携带的数据变化，是不会得到通知的
+   1、与ChangeNotifierProvider的不同是，携带的数据不需要是可监听的。因而数据变化无法触发Provider更新（Provider并不监听数据的变化）。
 
-   2、如果下面的控件读取（read）Provider携带的数据，获取的是当时的数据，后续变化后是不会得到通知
+   2、若一个child widget监听（watch）Provider携带的数据变化，是不会得到通知的。因为Provider自己也感知不到数据变化，它只是简单的持有数据。
 
-   3、持有的数据不能是: Listenable/Stream 的子类,否则DEBUG运行会报错,设置Provider.debugCheckInvalidValueType = null;可取消验证
+   3、若一个child widget读取（read）Provider携带的数据，获取的是即时数据，后续变化后是不会得到通知
+
+   4、持有的数据不能是: Listenable/Stream 的子类,否则DEBUG运行会报错,设置Provider.debugCheckInvalidValueType = null;可取消验证
 
    ```dart
-   ///1、只向下共享数据,但是数据变化不会更新 【因为根本就没有监听数据的变化】
+   ///1、只向下共享数据,但数据模型无法主动触发Provider更新 【因为Provider根本就没有监听数据的变化】
    ///T 类型,不能是Lisenable\Stream等可监听类型,如果需要监听数据变化,使用ChangeNotifierProvider
    class Provider<T> extends InheritedProvider<T> {
      Provider({
