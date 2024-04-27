@@ -28,7 +28,11 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 - 多个页面共享Provider，容易出现BUG。例如，页面A中有一个Provider，从A页面进入B中，B可正常访问其共享数据，但如果B页面显示而A页面被释放了，则会出现BUG。
 
-  **而使用riverpod则不会出现此问题，参考代码：**
+- 不安全，当重构代码，或大型项目时，容易抛出ProviderNotFoundException的异常（事实上这就是起初开发RiverPod的主要原因之一）
+
+- Provider无法做到没有监听者时，自动移除其所持有的状态。其状态一直持有，不管是否有监听者，直到其在组件树中被移除。
+
+  而riverpod可以轻松做到：
 
   ```dart
   @riverpod ///使用代码生成的provider,默认是.autoDispose
@@ -47,9 +51,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   }
   ```
 
-- 不安全，当重构代码，或大型项目时，容易抛出ProviderNotFoundException的异常（事实上这就是起初开发RiverPod的主要原因之一）
-
-- Provider无法做到没有监听者时，自动移除其所持有的状态。其状态一直持有，不管是否有监听者，直到其在组件树中被移除。
+- 55
 
 ### Riverpod使用介绍
 
