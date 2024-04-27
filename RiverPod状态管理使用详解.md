@@ -51,7 +51,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   }
   ```
 
-- Provider中数据变化后，依赖的child widget会被全部rebuild，如果只想要监听数据变化且不rebuild，则无法做到，但是riverpod中ref.listen方法可以轻松做到，参考：
+- Provider中数据变化后，依赖的child widget会被全部rebuild，如果只想要监听数据变化但不rebuild，则无法做到，但是riverpod中ref.listen方法可以轻松做到，参考：
 
   ```dart
   class DiceRollWidget extends ConsumerWidget {
@@ -59,7 +59,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
   
     @override
     Widget build(BuildContext context, WidgetRef ref) {
-      ref.listen(diceRollProvider, (previous, next) {///只是监听数据变化，去做指定的事，当当前widget不会更新
+      ref.listen(diceRollProvider, (previous, next) {///只是监听数据变化，去做指定的事，当前widget不会更新
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Dice roll! We got: $next')),
         );
