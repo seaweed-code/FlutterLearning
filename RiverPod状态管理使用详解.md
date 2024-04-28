@@ -110,14 +110,13 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-   2. 创建一个provider
+   2. 用全局函数自动创建一个provider
 
       ```dart
       import 'dart:convert';
       import 'package:http/http.dart' as http;
       import 'package:riverpod_annotation/riverpod_annotation.dart';
       import 'activity.dart';
-      
       
       part 'provider.g.dart';///自动生成的代码
       
