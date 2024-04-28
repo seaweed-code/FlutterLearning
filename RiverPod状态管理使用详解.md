@@ -313,5 +313,24 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
      }
    ```
 
+   ###### 4、我们也可以手动更新缓存
+
+   ```dart
+     Future<void> addTodo(Todo todo) async {
+       //1、调用接口更新数据
+       await http.post(
+         Uri.https('your_api.com', '/todos'),
+         headers: {'Content-Type': 'application/json'},
+         body: jsonEncode(todo.toJson()),
+       );
+       
+       ///2、读取上次的缓存数据（这里为何不直接使用state，而是使用future呢？）
+       final previousState = await future;  ///注意：读取上次的缓存，尽量不使用`this.state`，一个更好的方式是读取`this.future`，因为上次的缓存有可能是在加载中、或者错误
+   
+       ///3、将本次的数据todo手动加在上次的缓存中，更新缓存（会自动触发更新通知）
+       state = AsyncData([...previousState, todo]);
+     }
+   ```
+
    
 
