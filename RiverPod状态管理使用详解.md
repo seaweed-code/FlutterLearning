@@ -413,3 +413,16 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
       **!Important：**由此可见，同一个provider传递不同的参数，每组参数的结果都会被缓存，所以传递不同参数时，必须要让riverpod知道，这两个参数是否相同？riverpod依赖"==" 运算符来判断两个参数是否相同。
 
+      有个常见错误，是直接使用了不支持==运算符的对象，比如说：
+
+      ```dart
+          // We could update activityProvider to accept a list of strings instead.
+          // Then be tempted to create that list directly in the watch call.
+          ref.watch(activityProvider(['recreational', 'cooking']));
+      
+      ///由于['recreational', 'cooking'] == ['recreational', 'cooking'] 结果是false，所以会被认为是不同的参数，这将导致无限的发送网络请求，因为参数判断一直是false，
+      ///解决方案是：const ['recreational', 'cooking']、或者自定义类实现==方法
+      ```
+
+      
+
