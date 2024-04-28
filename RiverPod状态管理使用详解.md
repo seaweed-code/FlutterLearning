@@ -283,7 +283,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
          onPressed: () {
    //这里使用"ref.read"配合"myProvider.notifier",来获取notifier类的对象，这样才能call the "addTodo" method.
            ref
-               .read(todoListProvider.notifier)
+               .read(todoListProvider.notifier)///使用watch也能工作，但是最好使用read，因为这里不需要监听变化
                .addTodo(Todo(description: 'This is a new todo'));
          },
          child: const Text('Add todo'),
