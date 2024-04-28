@@ -149,16 +149,13 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       
         @override
         Widget build(BuildContext context) {
-          return Consumer(
+          return Consumer(///使用Consumer主要就是为了使用ref参数
             builder: (context, ref, child) {///主要使用ref参数监听provider，而不是context
-              // Read the activityProvider. This will start the network request
-              // if it wasn't already started.
-              // By using ref.watch, this widget will rebuild whenever the
+              // 通过ref监听 activityProvider. 首次读取会触发函数调用->请求数据
+              // 使用ref.watch监听，当前Counsumer会自动rebuild当activityProvider更新时，这可能发生在：
               // the activityProvider updates. This can happen when:
-              // - The response goes from "loading" to "data/error"
-              // - The request was refreshed
-              // - The result was modified locally (such as when performing side-effects)
-              // ...
+              // - 状态从loading-->成功（data）/失败Error
+              // - 刷新请求、provider状态数据被改变时
               final AsyncValue<Activity> activity = ref.watch(activityProvider);
       
               return Center(
