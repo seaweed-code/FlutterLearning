@@ -235,5 +235,5 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    }
    ```
 
-   
+   可以看到，当该类中只有Build方法时，其效果跟用函数生成Provider完全一样。
 
