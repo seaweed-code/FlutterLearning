@@ -273,6 +273,8 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
    ###### 2、使用Consumer`/`ConsumerWidget监听其数据变化
 
+   与上面的Provider监听方式有些许不同，参考代码：
+
    ```dart
    class Example extends ConsumerWidget {
      const Example({super.key});
@@ -290,6 +292,25 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
        );
      }
    }
+   ```
+
+   ###### 3、使用`ref.invalidateSelf()`来更新Provider
+
+   ```dart
+     Future<void> addTodo(Todo todo) async {
+       //调用API增加todo
+       await http.post(
+         Uri.https('your_api.com', '/todos'),
+         headers: {'Content-Type': 'application/json'},
+         body: jsonEncode(todo.toJson()),
+       );
+   
+       // 这个会标记当前缓存为dirty，然后引起provider的Build方法被异步调用，从而通知所有依赖者
+       ref.invalidateSelf();///这个方法不会等待build方法执行完，而是马上返回
+   
+       // (可选的) 在此可等待build方法执行完，确保本方法结束的时候数据已经更新了
+       await future;
+     }
    ```
 
    
