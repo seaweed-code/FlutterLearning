@@ -201,7 +201,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
         void initState() {
           super.initState();
       
-          //通过ref.watch方法监听，会自动触发rebuild，如果我们只是想单纯的监听变化，可以使用这里的手动监听
+          //通过ref.watch方法监听，会自动触发rebuild，如果我们只是想单纯的监听变化而不rebuild，可使用手动监听
           ref.listenManual(activityProvider, (previous, next) {
             // TODO show a snackbar/dialog
           });
