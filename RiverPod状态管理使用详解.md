@@ -219,4 +219,4 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 2. #### 用全局类自动创建的provider（所谓的“notifier”）
 
-   
+   **问题**：第一步中使用函数创建的provivder，其数据是有函数计算结果返回的，后续读取该provider可以获取到该缓存，但是*<u>外部无法对该缓存进行修改</u>*，例如增加、删除等。
