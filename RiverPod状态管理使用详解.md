@@ -226,7 +226,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    @riverpod
    class TodoList extends _$TodoList {///类TodoList将会自动生成一个provider
      @override
-     Future<List<Todo>> build() async {///这个build函数，跟用函数创建Provider的函数意义完全一样
+     Future<List<Todo>> build() async {///这个build函数，跟上面用函数创建Provider的函数意义完全一样
        return [
          Todo(description: 'Learn Flutter', completed: true),
          Todo(description: 'Learn Riverpod'),
