@@ -235,5 +235,8 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    }
    ```
 
-   可以看到，当该类中只有Build方法时，其效果跟用函数生成Provider完全一样。
+   **注意：**
+
+   - 当该类中只有Build方法时，其效果跟用函数生成Provider完全一样。
+   - 不要在notifier的构造方法中写任何逻辑。因为ref和其他属性此时还没有初始化，应该在build方法中写逻辑。
 
