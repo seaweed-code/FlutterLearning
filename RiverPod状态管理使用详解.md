@@ -219,15 +219,14 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 2. #### 用全局类自动创建的provider（也就是所谓的“notifier”）
 
-   **问题**：第一步中使用函数创建的provivder，其数据是有函数计算结果返回的，后续读取该provider可以获取到该缓存，但是*<u>外部无法对该缓存进行修改</u>*，例如增加、删除等。因而我们可以用类来自动创建一个Provider，步骤如下：
+   **问题**：第一步中使用函数创建的provivder，其数据是有函数计算结果返回的，后续读取该provider可以获取到该缓存，但是*<u>外部无法对该缓存进行修改</u>*，例如增加、删除等。因而我们可以用类来自动创建一个Provider，代码参考如下：
 
    ```dart
-   //要使用riverpod代码自动生成provider，只需要类上加上注解：@riverpod，且继承一个类名字:_$原类名
+   //要使用riverpod代码自动生成provider，只需要类上加上注解：@riverpod，且继承一个类（名为：_$原类名）
    @riverpod
    class TodoList extends _$TodoList {///类TodoList将会自动生成一个provider
      @override
-     Future<List<Todo>> build() async {
-       // The logic we previously had in our FutureProvider is now in the build method.
+     Future<List<Todo>> build() async {///这个build函数，跟用函数创建Provider的函数意义完全一样
        return [
          Todo(description: 'Learn Flutter', completed: true),
          Todo(description: 'Learn Riverpod'),
