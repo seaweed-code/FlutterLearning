@@ -366,7 +366,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
         return Activity.fromJson(json);
       }
       
-      ///通过类自动创建的Provider，Notifier也可以在Build方法中增加参数，效果与上面一样
+      ///通过类自动创建的Provider（即Notifier）也可以在Build方法中增加参数，效果与上面一样
       @riverpod
       class ActivityNotifier2 extends _$ActivityNotifier2 {
        
@@ -378,12 +378,18 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-      
-
    2. 一旦有了参数，使用时会有少许不同：
 
       ```dart
+      ///以前的使用方式是：
+            AsyncValue<Activity> activity = ref.watch(activityProvider);
       
+      ///现在必须改成：
+          AsyncValue<Activity> activity = ref.watch(
+            // The provider is now a function expecting the activity type.
+            // Let's pass a constant string for now, for the sake of simplicity.
+            activityProvider('recreational'),
+          );
       ```
 
       
