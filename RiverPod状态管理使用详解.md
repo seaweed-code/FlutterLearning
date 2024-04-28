@@ -156,7 +156,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
               // the activityProvider updates. This can happen when:
               // - 状态从loading-->成功（data）/失败Error
               // - 刷新请求、provider状态数据被改变时
-              final AsyncValue<Activity> activity = ref.watch(activityProvider);
+              final AsyncValue<Activity> activity = ref.watch(activityProvider);///可监听任意个provider
       
               return Center(
       /// 因为网络请求是异步的，而且可能失败，所以我们要处理可能的错误。也可以通过activity.isLoading判断是否在加载中
@@ -172,7 +172,54 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-      
+2. 为了使用ref参数，我们上面使用了Consumer，事实上，以上代码完全等同于：
 
-2. 房
+   ```dart
+   class Home extends ConsumerWidget {///等同与上面的StatelessWidget中返回Consumer
+     const Home({super.key});
+   
+     @override
+     Widget build(BuildContext context, WidgetRef ref) {//注意 ：这里的build多了一个参数ref
+       //这里可以通过ConsumerWidget的ref参数，监听、读取任何provider
+       final AsyncValue<Activity> activity = ref.watch(activityProvider);
+       // The rendering logic stays the same
+       return Center(/* ... */);
+     }
+   }
+   
+   
+   ///如果是StatefulWidget的话，就使用ConsumerStatefulWidget
+   class Home extends ConsumerStatefulWidget {///等同于"Consumer" + "StatefulWidget".
+     const Home({super.key});
+   
+     @override
+     ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
+   }
+   
+   // Notice how instead of "State", we are extending "ConsumerState".
+   // This uses the same principle as "ConsumerWidget" vs "StatelessWidget".
+   class _HomeState extends ConsumerState<Home> {
+     @override
+     void initState() {
+       super.initState();
+   
+       //通过ref.watch方法监听，会自动触发rebuild，如果我们只是想单纯的监听变化，可以使用这里的手动监听
+       ref.listenManual(activityProvider, (previous, next) {
+         // TODO show a snackbar/dialog
+       });
+     }
+   
+     @override
+     Widget build(BuildContext context) {///ref不是一个参数，而是ConsumerState的一个成员变量，所以直接使用
+       // We can therefore keep using "ref.watch" inside "build".
+       final AsyncValue<Activity> activity = ref.watch(activityProvider);
+   
+       return Center(/* ... */);
+     }
+   }
+   ```
+
+   
+
+3. 的
 
