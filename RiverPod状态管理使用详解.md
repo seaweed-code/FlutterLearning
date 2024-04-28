@@ -332,5 +332,15 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
      }
    ```
 
+   ###### 5、上面的state是immutable，每次更新都是创建一个新的对象去覆盖，这样会自动触发更新，如果是mutable的呢？可以这样：
+
+   ```dart
+   final previousState = await future;///假设state是一个数组
+      
+   previousState.add(todo);///不是全量覆盖，而是调用其内部方法更新
+       
+   ref.notifyListeners();///这时需要手动调用notifyListeners通知监听者
+   ```
+
    
 
