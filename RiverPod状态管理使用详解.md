@@ -392,5 +392,25 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
           );
       ```
 
+   3. 完全可以同时对一个provider，传递不同参数，例如：
+
+      ```dart
+          return Consumer(
+            builder: (context, ref, child) {
+              final recreational = ref.watch(activityProvider('recreational'));
+              final cooking = ref.watch(activityProvider('cooking'));
+              
+              //两个请求会同时并发进行，数据也会同时被缓存（基于参数）.
+              return Column(
+                children: [
+                  Text(recreational.valueOrNull?.activity ?? ''),
+                  Text(cooking.valueOrNull?.activity ?? ''),
+                ],
+              );
+            },
+          );
+          
+      ```
+
       
 
