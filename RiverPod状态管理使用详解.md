@@ -94,7 +94,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 ### Riverpod使用介绍
 
-1. #### 简单网络请求
+1. #### 用全局函数自动创建的provider实现简单网络请求
 
    1. ###### 设置ProviderScope
 
