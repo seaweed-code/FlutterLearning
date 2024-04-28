@@ -412,5 +412,5 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
           
       ```
 
-      
+      **!Important：**由此可见，同一个provider传递不同的参数，每组参数的结果都会被缓存，所以传递不同参数时，必须要让riverpod知道，这两个参数是否相同？riverpod依赖"==" 运算符来判断两个参数是否相同。
 
