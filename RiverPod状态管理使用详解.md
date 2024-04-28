@@ -175,7 +175,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 2. 为了使用ref参数，我们上面使用了Consumer，事实上，以上代码完全等同于：
 
    ```dart
-   class Home extends ConsumerWidget {///等同与上面的StatelessWidget中返回Consumer
+   class Home extends ConsumerWidget {///等同与上面的"Consumer" + "StatelessWidget"
      const Home({super.key});
    
      @override
@@ -218,8 +218,6 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
      }
    }
    ```
-
-   
 
 3. 的
 
