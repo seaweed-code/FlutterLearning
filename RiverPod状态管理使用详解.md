@@ -94,11 +94,9 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 ### Riverpod使用介绍
 
-1. 简单网络请求
+1. #### 简单网络请求
 
-   步骤如下：
-
-   1. 设置ProviderScope
+   1. ###### 设置ProviderScope
 
       ```dart
       void main() {
@@ -110,7 +108,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-   2. 用全局函数自动创建一个provider
+   2. ###### 用全局函数自动创建一个provider
 
       ```dart
       import 'dart:convert';
@@ -134,7 +132,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-   3. 通过Consumer读取、监听provider的数据变化
+   3. ###### 通过Consumer读取、监听provider的数据变化
 
       ```dart
       import 'package:flutter/material.dart';
@@ -172,52 +170,55 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-2. 为了使用ref参数，我们上面使用了Consumer，事实上，以上代码完全等同于：
+   4. ###### 为了使用ref参数，我们上面使用了Consumer，事实上，以上代码完全等同于：
 
-   ```dart
-   class Home extends ConsumerWidget {///等同与上面的"Consumer" + "StatelessWidget"
-     const Home({super.key});
-   
-     @override
-     Widget build(BuildContext context, WidgetRef ref) {//注意 ：这里的build多了一个参数ref
-       //这里可以通过ConsumerWidget的ref参数，监听、读取任何provider
-       final AsyncValue<Activity> activity = ref.watch(activityProvider);
-       // The rendering logic stays the same
-       return Center(/* ... */);
-     }
-   }
-   
-   
-   ///如果是StatefulWidget的话，就使用ConsumerStatefulWidget
-   class Home extends ConsumerStatefulWidget {///等同于"Consumer" + "StatefulWidget".
-     const Home({super.key});
-   
-     @override
-     ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
-   }
-   
-   // Notice how instead of "State", we are extending "ConsumerState".
-   // This uses the same principle as "ConsumerWidget" vs "StatelessWidget".
-   class _HomeState extends ConsumerState<Home> {
-     @override
-     void initState() {
-       super.initState();
-   
-       //通过ref.watch方法监听，会自动触发rebuild，如果我们只是想单纯的监听变化，可以使用这里的手动监听
-       ref.listenManual(activityProvider, (previous, next) {
-         // TODO show a snackbar/dialog
-       });
-     }
-   
-     @override
-     Widget build(BuildContext context) {///ref不是一个参数，而是ConsumerState的一个成员变量，所以直接使用
-       // We can therefore keep using "ref.watch" inside "build".
-       final AsyncValue<Activity> activity = ref.watch(activityProvider);
-   
-       return Center(/* ... */);
-     }
-   }
-   ```
+      ```dart
+      class Home extends ConsumerWidget {///等同与上面的"Consumer" + "StatelessWidget"
+        const Home({super.key});
+      
+        @override
+        Widget build(BuildContext context, WidgetRef ref) {//注意 ：这里的build多了一个参数ref
+          //这里可以通过ConsumerWidget的ref参数，监听、读取任何provider
+          final AsyncValue<Activity> activity = ref.watch(activityProvider);
+          // The rendering logic stays the same
+          return Center(/* ... */);
+        }
+      }
+      
+      
+      ///如果是StatefulWidget的话，就使用ConsumerStatefulWidget
+      class Home extends ConsumerStatefulWidget {///等同于"Consumer" + "StatefulWidget".
+        const Home({super.key});
+      
+        @override
+        ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
+      }
+      
+      // Notice how instead of "State", we are extending "ConsumerState".
+      // This uses the same principle as "ConsumerWidget" vs "StatelessWidget".
+      class _HomeState extends ConsumerState<Home> {
+        @override
+        void initState() {
+          super.initState();
+      
+          //通过ref.watch方法监听，会自动触发rebuild，如果我们只是想单纯的监听变化，可以使用这里的手动监听
+          ref.listenManual(activityProvider, (previous, next) {
+            // TODO show a snackbar/dialog
+          });
+        }
+      
+        @override
+        Widget build(BuildContext context) {///ref不是一个参数，而是ConsumerState的一个成员变量，所以直接使用
+          // We can therefore keep using "ref.watch" inside "build".
+          final AsyncValue<Activity> activity = ref.watch(activityProvider);
+      
+          return Center(/* ... */);
+        }
+      }
+      ```
 
-3. 的
+   
 
+2. ##### 人人通
+
+   
