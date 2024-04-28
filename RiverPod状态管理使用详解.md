@@ -240,7 +240,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    - 当该类中只有Build方法时，其效果跟用函数生成Provider完全一样。
    - 不要在notifier的构造方法中写任何逻辑。因为ref和其他属性此时还没有初始化，应该在build方法中写逻辑。
 
-   现在我们可以在TodoList类中增加其他方法，来修改其内部持有的State，初始数据也就是build方法中返回的数据。
+   现在我们可以在TodoList类中增加其他方法，来**修改其内部持有的缓存State**，初始数据也就是build方法中返回的数据。
 
    ```dart
    @riverpod
