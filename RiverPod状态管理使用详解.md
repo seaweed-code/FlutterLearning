@@ -342,5 +342,49 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    ref.notifyListeners();///这时需要手动调用notifyListeners通知监听者
    ```
 
-   
+   ###### 6、传递参数给Provider
+
+   1. 不管是上面的functional Provider还是notifier，我们都可以给他传递任意参数，毕竟网络请求总是要传参的，可以如下：
+
+      ```dart
+      ///通过函数自动创建provider的方式，可以在后面传递任意个参数（类型任意）
+      @riverpod
+      Future<Activity> activity(
+        ActivityRef ref,
+        String activityType,///增加一个参数，需要的话可以传多个，可以是可选的，或者命名参数
+      ) async {
+      
+        final response = await http.get(
+          Uri(
+            scheme: 'https',
+            host: 'boredapi.com',
+            path: '/api/activity',
+            queryParameters: {'type': activityType},
+          ),
+        );
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        return Activity.fromJson(json);
+      }
+      
+      ///通过类自动创建的Provider，Notifier也可以在Build方法中增加参数，效果与上面一样
+      @riverpod
+      class ActivityNotifier2 extends _$ActivityNotifier2 {
+       
+        @override
+        Future<Activity> build(String activityType) async {///传递一个参数
+          print(this.activityType);
+          return fetchActivity();
+        }
+      }
+      ```
+
+      
+
+   2. 一旦有了参数，使用时会有少许不同：
+
+      ```dart
+      
+      ```
+
+      
 
