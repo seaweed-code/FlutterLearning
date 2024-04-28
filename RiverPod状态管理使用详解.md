@@ -170,7 +170,7 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-   4. ###### 为了使用ref参数，我们上面使用了Consumer，事实上，以上代码完全等同于：
+   4. ###### 通过ConsumerWidget（"Consumer" + "StatelessWidget"）读取、监听provider的数据变化。事实上，以上代码完全等同于：
 
       ```dart
       class Home extends ConsumerWidget {///等同与上面的"Consumer" + "StatelessWidget"
