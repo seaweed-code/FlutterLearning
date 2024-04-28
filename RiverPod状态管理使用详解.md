@@ -217,8 +217,6 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
       }
       ```
 
-   
-
-2. ##### 人人通
+2. #### 用全局类自动创建的provider（所谓的“notifier”）
 
    
