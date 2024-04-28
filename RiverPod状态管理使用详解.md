@@ -94,5 +94,48 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
 
 ### Riverpod使用介绍
 
-1. 
+1. 简单网络请求
+
+   步骤如下：
+
+   1. 设置ProviderScope
+
+      ```dart
+      void main() {
+        runApp(
+          ProviderScope( // 放在最上面，整个APP都可以使用riverPod
+            child: MyApp(),
+          ),
+        );
+      }
+      ```
+
+   2. 创建一个provider
+
+      ```dart
+      import 'dart:convert';
+      import 'package:http/http.dart' as http;
+      import 'package:riverpod_annotation/riverpod_annotation.dart';
+      import 'activity.dart';
+      
+      
+      part 'provider.g.dart';///自动生成的代码
+      
+      ///这将自动创建一个名为：`activityProvider`的provider
+      ///下面方法只会在provider被首次读取时执行，后续直接使用缓存
+      ///当没有人监听此provider时，数据会被释放，后续一旦又有人访问，则会重新执行此函数，生成缓存
+      ///此次并没有处理错误，riverpod会自动处理错误
+      @riverpod
+      Future<Activity> activity(ActivityRef ref) async {
+        ///网络请求，JSON转换模型
+        final response = await http.get(Uri.https('boredapi.com', '/api/activity'));
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        
+        return Activity.fromJson(json);
+      }
+      ```
+
+   3. 
+
+2. 房
 
