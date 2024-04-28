@@ -271,5 +271,26 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    }
    ```
 
+   ###### 2、使用Consumer`/`ConsumerWidget监听其数据变化
+
+   ```dart
+   class Example extends ConsumerWidget {
+     const Example({super.key});
+   
+     @override
+     Widget build(BuildContext context, WidgetRef ref) {
+       return ElevatedButton(
+         onPressed: () {
+   //这里使用"ref.read"配合"myProvider.notifier",来获取notifier类的对象，这样才能call the "addTodo" method.
+           ref
+               .read(todoListProvider.notifier)
+               .addTodo(Todo(description: 'This is a new todo'));
+         },
+         child: const Text('Add todo'),
+       );
+     }
+   }
+   ```
+
    
 
