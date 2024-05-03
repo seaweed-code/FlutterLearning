@@ -429,3 +429,15 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    ###### 7、riverpod内部的各种Provider比较
    
    
+   
+   | 类型                                                         |      |      |      |      |
+   | ------------------------------------------------------------ | :--- | ---- | ---- | ---- |
+   | [Provider](https://riverpod.dev/docs/providers/provider)     |      |      |      |      |
+   | [StateProvider](https://riverpod.dev/docs/providers/state_provider) |      |      |      |      |
+   | [FutureProvider](https://riverpod.dev/docs/providers/future_provider) |      |      |      |      |
+   | [StreamProvider](https://riverpod.dev/docs/providers/stream_provider) |      |      |      |      |
+   | [NotifierProvider](https://riverpod.dev/docs/providers/notifier_provider) |      |      |      |      |
+   | [StateNotifierProvider](https://riverpod.dev/docs/providers/state_notifier_provider) |      |      |      |      |
+   | [ChangeNotifierProvider](https://pub.dev/documentation/flutter_riverpod/latest/flutter_riverpod/ChangeNotifierProvider-class.html) |      |      |      |      |
+   
+   
