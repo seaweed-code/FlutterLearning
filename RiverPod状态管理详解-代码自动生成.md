@@ -1,6 +1,6 @@
-# RiverPod状态管理注解使用详解
+# RiverPod状态管理详解-代码自动生成
 
-Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Provider字母顺序打乱组成“RiverPod”，这是一个带**有缓存**、且响应式的状态管理组件。可以帮你实现带有缓存的网络请求，并在需要的时候重新请求。
+Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Provider字母顺序打乱组成“RiverPod”，这是一个带**有缓存**、且响应式的状态管理组件。可以帮你实现带有缓存的网络请求，并在需要的时候重新请求。下面主要介绍使用注解配合代码自动生成工具的使用。
 
 ### Provider组件的局限性
 
@@ -430,14 +430,15 @@ Riverpod是由Provider的作者，在Provider的基础上演变而来的，把Pr
    
    
    
-   | 类型                                                         |      |      |      |      |
-   | ------------------------------------------------------------ | :--- | ---- | ---- | ---- |
-   | [Provider](https://riverpod.dev/docs/providers/provider)     |      |      |      |      |
-   | [StateProvider](https://riverpod.dev/docs/providers/state_provider) |      |      |      |      |
-   | [FutureProvider](https://riverpod.dev/docs/providers/future_provider) |      |      |      |      |
-   | [StreamProvider](https://riverpod.dev/docs/providers/stream_provider) |      |      |      |      |
-   | [NotifierProvider](https://riverpod.dev/docs/providers/notifier_provider) |      |      |      |      |
-   | [StateNotifierProvider](https://riverpod.dev/docs/providers/state_notifier_provider) |      |      |      |      |
-   | [ChangeNotifierProvider](https://pub.dev/documentation/flutter_riverpod/latest/flutter_riverpod/ChangeNotifierProvider-class.html) |      |      |      |      |
+   | 类型                                                         | 被监听、读取 | 可手动更新缓存 | 是否异步 |      |
+   | ------------------------------------------------------------ | :----------- | -------------- | -------- | ---- |
+   | [Provider](https://riverpod.dev/docs/providers/provider)     | √            | ×              | ×        |      |
+   | [StateProvider](https://riverpod.dev/docs/providers/state_provider) | √            | √              | ×        |      |
+   | [FutureProvider](https://riverpod.dev/docs/providers/future_provider) | √            | ×              | √        |      |
+   | [StreamProvider](https://riverpod.dev/docs/providers/stream_provider) | √            | ×              | √        |      |
+   | [NotifierProvider](https://riverpod.dev/docs/providers/notifier_provider) | √            | √              | ×        |      |
+   | AsyncNotifierProvider                                        | √            | √              | √        |      |
+   | [StateNotifierProvider](https://riverpod.dev/docs/providers/state_notifier_provider) | √            | ×              | ×        |      |
+   | [ChangeNotifierProvider](https://pub.dev/documentation/flutter_riverpod/latest/flutter_riverpod/ChangeNotifierProvider-class.html) | √            | ×              | ×        |      |
    
    
