@@ -65,6 +65,7 @@ final todosProvider = NotifierProvider<TodosNotifier, List<Todo>>(() {
 一种简化版本的[NotifierProvider](https://riverpod.dev/docs/providers/notifier_provider)，可以直接调用update方法更新state，而不用写notifier类进行修改。
 
 - 相比于最基础的Provider（不能外部修改其缓存state）,StateProvider提供一种简单方法让外部可以修改state
+- 相比于NotifierProvider，只能使用update方法进行简单修改，如果有很复杂逻辑还得是NotifierProvider
 
 ```dart
 final pageIndexProvider = StateProvider<int>((ref) => 0);
