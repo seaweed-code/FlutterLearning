@@ -27,6 +27,47 @@ Widget build(BuildContext context, WidgetRef ref) {
 
 
 
+### StreamProvider
+
+与FutureProvider类似，只不过返回的是Streams，而不是Future
+
+```dart
+final chatProvider = StreamProvider<List<String>>((ref) async* {
+  // Connect to an API using sockets, and decode the output
+  final socket = await Socket.connect('my-api', 4242);
+  ref.onDispose(socket.close);
+
+  var allMessages = const <String>[];
+  await for (final message in socket.map(utf8.decode)) {
+    // A new message has been received. Let's add it to the list of all messages.
+    allMessages = [...allMessages, message];
+    yield allMessages;
+  }
+});
+///UI监听方式
+Widget build(BuildContext context, WidgetRef ref) {
+  final liveChats = ref.watch(chatProvider);
+
+  // Like FutureProvider, it is possible to handle loading/error states using AsyncValue.when
+  return switch (liveChats) {
+    // Display all the messages in a scrollable list view.
+    AsyncData(:final value) => ListView.builder(
+        // Show messages from bottom to top
+        reverse: true,
+        itemCount: value.length,
+        itemBuilder: (context, index) {
+          final message = value[index];
+          return Text(message);
+        },
+      ),
+    AsyncError(:final error) => Text(error.toString()),
+    _ => const CircularProgressIndicator(),
+  };
+}
+```
+
+
+
 ### (Async)NotifierProvider
 
 相当于最基础的Provider + 支持外部修改其缓存state
@@ -93,6 +134,8 @@ class PreviousButton extends ConsumerWidget {
 
 
 ### StateNotifierProvider
+
+推荐使用NotifierProvider！
 
 ```dart
 // The state of our StateNotifier should be immutable.
