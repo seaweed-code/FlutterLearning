@@ -157,6 +157,56 @@ class PreviousButton extends ConsumerWidget {
 }
 ```
 
+### ChangeNotifierProvider
+
+不鼓励使用，推荐使用NotifierProvider！与NotifierProvider的主要区别是，当数据（state状态）变化后，必须手动通知更新。一般只有如下情况使用：
+
+- 刚从package:provider组件过度过来的
+- 当你的数据是mutable的时候，这时候必须手动通知更新
+
+```dart
+class Todo {///mutable数据（属性不是final类型）
+  Todo({
+    required this.id,
+    required this.description,
+    required this.completed,
+  });
+
+  String id;
+  String description;
+  bool completed;
+}
+
+class TodosNotifier extends ChangeNotifier {
+  final todos = <Todo>[];
+
+  // Let's allow the UI to add todos.
+  void addTodo(Todo todo) {
+    todos.add(todo);
+    notifyListeners();///必须手动通知更新
+  }
+
+  // Let's allow removing todos
+  void removeTodo(String todoId) {
+    todos.remove(todos.firstWhere((element) => element.id == todoId));
+    notifyListeners();///必须手动通知更新
+  }
+
+  // Let's mark a todo as completed
+  void toggle(String todoId) {
+    final todo = todos.firstWhere((todo) => todo.id == todoId);
+    todo.completed = !todo.completed;
+    notifyListeners();///必须手动通知更新
+  }
+}
+
+// Finally, we are using ChangeNotifierProvider to allow the UI to interact with
+// our TodosNotifier class.
+final todosProvider = ChangeNotifierProvider<TodosNotifier>((ref) {
+  return TodosNotifier();
+});
+```
+
 
 
 ### StateNotifierProvider
