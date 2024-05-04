@@ -5,7 +5,8 @@
 最基础的Provider，提供以下功能：
 
 - 可以监听、读取其他任意数量、类型的Provider
-- 初始化，并持有状态，共享其他人使用（被其他Provider读取、监听）
+- 初始化的计算结果（build方法），并缓存起来，共享其他人使用（被其他Provider读取、监听），直到所依赖的provider有更新，才会重新计算结果（再次调用build方法），并缓存最新值。
+- 持有的状态无法被外部主动修改。
 
 ```dart
 final completedTodosProvider = Provider<List<Todo>>((ref) {
