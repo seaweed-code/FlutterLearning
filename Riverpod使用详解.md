@@ -9,9 +9,8 @@
 
 ```dart
 final completedTodosProvider = Provider<List<Todo>>((ref) {
-  // We obtain the list of all todos from the todosProvider
-  final todos = ref.watch(todosProvider);
-
+  final todos = ref.watch(todosProvider);///通过ref可以监听或读取，其他任意数量的provider
+  
   // we return only the completed todos
   return todos.where((todo) => todo.isCompleted).toList();
 });
