@@ -2,7 +2,11 @@
 
 
 
-### NotifierProvider
+### (Async)NotifierProvider
+
+- 相比于最基础的Provider（不能外部修改其缓存state）,NotifierProvider可以在Notifier类中修改其state，并自动通知依赖更新
+- 【优点】将所有的修改state的业务逻辑代码集中放置在Notifier类（如下的TodosNotifier）中，有利于代码维护
+- NotifierProvider和AsyncNotifierProvider的区别主要是前者build方法是同步，后者是异步
 
 ```dart
 class Todo {
