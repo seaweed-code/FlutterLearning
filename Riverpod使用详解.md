@@ -1,5 +1,31 @@
 ## Riverpod状态管理使用详解
 
+### Provider
+
+最基础的Provider，提供以下功能：
+
+- 可以监听、读取其他Provider
+- 初始化，并持有状态，共享给其他人使用
+
+```dart
+final completedTodosProvider = Provider<List<Todo>>((ref) {
+  // We obtain the list of all todos from the todosProvider
+  final todos = ref.watch(todosProvider);
+
+  // we return only the completed todos
+  return todos.where((todo) => todo.isCompleted).toList();
+});
+///UI监听方式
+Consumer(builder: (context, ref, child) {
+  final completedTodos = ref.watch(completedTodosProvider);
+  // TODO show the todos using a ListView/GridView/.../* SKIP */
+  return Container();
+  /* SKIP END */
+});
+```
+
+
+
 ### FutureProvider
 
 相当于最基础的Provider + 异步处理
