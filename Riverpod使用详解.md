@@ -211,7 +211,7 @@ final todosProvider = ChangeNotifierProvider<TodosNotifier>((ref) {
 
 ### StateNotifierProvider
 
-推荐使用NotifierProvider！
+[【推荐使用NotifierProvider！以后可能被移除。】](https://github.com/rrousselGit/riverpod/issues/2630)
 
 ```dart
 // The state of our StateNotifier should be immutable.
