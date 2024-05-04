@@ -99,7 +99,7 @@ Widget build(BuildContext context, WidgetRef ref) {
 
 - 【优点】将所有的修改state的业务逻辑代码集中放置在Notifier类（如下的TodosNotifier）中，有利于代码维护
 - NotifierProvider和AsyncNotifierProvider的区别主要是前者build方法是同步，后者是异步
-- 对于数据，必须是imutable的，如果是mutable的需要自己手动调用notifyListeners
+- 对于数据（如下的Todo），必须是imutable的，如果是mutable的需要自己手动调用notifyListeners
 
 ```dart
 class Todo {
