@@ -115,7 +115,7 @@ class TodosNotifier extends Notifier<List<Todo>> {
   }
 
   void addTodo(Todo todo) {
-    state = [...state, todo];///修改缓存
+    state = [...state, todo];///修改缓存,不需要调用notifyListeners
   }
   // TODO add other methods, such as "removeTodo", ...
 }
