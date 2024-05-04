@@ -20,7 +20,6 @@ Consumer(builder: (context, ref, child) {
   final completedTodos = ref.watch(completedTodosProvider);
   // TODO show the todos using a ListView/GridView/.../* SKIP */
   return Container();
-  /* SKIP END */
 });
 ```
 
