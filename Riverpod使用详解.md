@@ -161,7 +161,7 @@ class PreviousButton extends ConsumerWidget {
 
 【不鼓励使用，推荐使用NotifierProvider】与NotifierProvider的主要区别是，当数据（state状态）变化后，必须手动通知更新。一般只有如下情况使用：
 
-- 刚从package:provider组件过度过来的
+- 从package:provider组件过度过来的
 - 当你的数据是mutable的时候，这时候必须手动通知更新
 
 ```dart
