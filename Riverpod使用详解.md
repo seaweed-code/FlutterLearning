@@ -4,8 +4,8 @@
 
 最基础的Provider，提供以下功能：
 
-- 可以监听、读取其他Provider
-- 初始化，并持有状态，共享给其他人使用
+- 可以监听、读取其他任意数量、类型的Provider
+- 初始化，并持有状态，共享其他人使用（被其他Provider读取、监听）
 
 ```dart
 final completedTodosProvider = Provider<List<Todo>>((ref) {
