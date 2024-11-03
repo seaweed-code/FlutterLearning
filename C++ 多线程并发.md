@@ -81,7 +81,7 @@
    }
    ```
 
-   future析构会阻塞：
+   async函数返回的future析构会阻塞：
 
    ```c++
    std::async(std::launch::async,[](){
@@ -94,7 +94,7 @@
    std::cout << "end---" << std::endl;///2、再执行
    ```
 
-   析构时确实会阻塞：
+   async函数返回的future析构会阻塞：
 
    ```c++
    {
@@ -119,7 +119,7 @@
    }
    ```
 
-   future析构时不会阻塞？
+   promise的future析构时不会阻塞：
 
    ```c++
    std::promise<int> prom;
